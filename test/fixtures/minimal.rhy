@@ -1,0 +1,45 @@
+// Minimal Ruchy syntax example
+// Tests core language constructs
+
+fn main() {
+    let x = 42
+    let y = 3.14
+    let name = "Ruchy"
+    let enabled = true
+    
+    // Pipeline operator (new syntax)
+    let double = |n| n * 2
+    let result = x >> double >> print
+    
+    // Control flow
+    if x > 0 {
+        return x
+    } else {
+        return 0
+    }
+}
+
+// Pattern matching
+fn classify(value: int) -> str {
+    match value {
+        0 => "zero"
+        1..=10 => "small"
+        _ => "large"
+    }
+}
+
+// Simple struct
+struct Point {
+    x: float,
+    y: float
+}
+
+impl Point {
+    fn new(x: float, y: float) -> Point {
+        Point { x, y }
+    }
+    
+    fn distance(&self) -> float {
+        (self.x ** 2.0 + self.y ** 2.0).sqrt()
+    }
+}

@@ -1,0 +1,240 @@
+# Ruchy Syntax Tools - PDMT Roadmap Configuration
+# Project Development Management Template (PDMT) v2.0
+# Integrated with PMAT quality gates and Toyota Way methodology
+
+project:
+  name: "ruchy-syntax-tools"
+  version: "0.1.0"
+  start_date: "2025-08-23"
+  target_completion: "2025-09-23"
+  methodology: "Sprint-based Agile Development with Quality Gates"
+  task_id_pattern: "RSYN-[0-9]{4}"
+  
+task_categories:
+  FOUND: "Foundation & Infrastructure"
+  TMGR: "TextMate Grammar"
+  TSGR: "Tree-sitter Grammar" 
+  WEBGR: "Web Grammars (highlight.js, Prism)"
+  QUAL: "Quality & Testing"
+  UPSTR: "Upstream Integration"
+
+phases:
+  P0_Foundation:
+    name: "Foundation Infrastructure"
+    priority: "P0"
+    duration_weeks: 1
+    description: "Core build system and project structure"
+    success_criteria:
+      - "Build system functional with all targets"
+      - "Basic TextMate grammar compiles successfully"
+      - "Test framework validates grammar correctness"
+    
+  P1_Grammar:
+    name: "TextMate Grammar Completion"
+    priority: "P1"
+    duration_weeks: 1
+    description: "Complete TextMate grammar implementation"
+    dependencies: ["P0_Foundation"]
+    success_criteria:
+      - "All Ruchy language constructs highlighted"
+      - "Performance targets met (<25ms)"
+      - "Visual regression tests passing"
+    
+  P2_MultiPlatform:
+    name: "Multi-Platform Extension"
+    priority: "P1"
+    duration_weeks: 1
+    description: "Tree-sitter, highlight.js, Prism support"
+    dependencies: ["P1_Grammar"]
+    success_criteria:
+      - "3+ grammar formats implemented"
+      - "Cross-platform validation complete"
+      - "VS Code extension functional"
+    
+  P3_Upstream:
+    name: "Upstream Integration"
+    priority: "P2"
+    duration_weeks: 1
+    description: "Submit to upstream repositories"
+    dependencies: ["P2_MultiPlatform"]
+    success_criteria:
+      - "GitHub Linguist PR submitted"
+      - "VS Code Marketplace published"
+      - "Community documentation complete"
+
+completed_sprints:
+  - name: "Foundation Setup"
+    phase: "P0_Foundation"
+    start_date: "2025-08-23"
+    end_date: "2025-08-23"
+    story_points_completed: 8
+    tasks_completed: 4
+    success_criteria_met: true
+    
+current_sprint:
+  name: "TextMate Grammar MVP"
+  phase: "P1_Grammar"
+  start_date: "2025-08-23"
+  end_date: "2025-08-30"
+  story_points_capacity: 25
+  story_points_completed: 14
+  
+  tasks:
+    # Completed Foundation Tasks
+    - id: "RSYN-0001"
+      title: "Project structure and documentation"
+      priority: "P0"
+      complexity: 2
+      status: "COMPLETED"
+      category: "FOUND"
+      completion_date: "2025-08-23"
+      quality_gates_passed: true
+      
+    - id: "RSYN-0002" 
+      title: "Build system with Makefile"
+      priority: "P0"
+      complexity: 2
+      status: "COMPLETED"
+      category: "FOUND"
+      completion_date: "2025-08-23"
+      quality_gates_passed: true
+      
+    - id: "RSYN-0003"
+      title: "TextMate grammar foundation"
+      priority: "P1"
+      complexity: 3
+      status: "COMPLETED"
+      category: "TMGR"
+      completion_date: "2025-08-23"
+      quality_gates_passed: true
+      
+    - id: "RSYN-0004"
+      title: "Quality gates and PMAT integration"
+      priority: "P0"
+      complexity: 1
+      status: "COMPLETED"
+      category: "QUAL"
+      completion_date: "2025-08-23"
+      quality_gates_passed: true
+      
+    # Current Sprint Tasks
+    - id: "RSYN-0101"
+      title: "Core keyword and operator highlighting"
+      priority: "P0"
+      complexity: 7
+      status: "COMPLETED"
+      category: "TMGR"
+      completion_date: "2025-08-23"
+      acceptance_criteria_met: true
+      quality_gates_passed: true
+      
+    - id: "RSYN-0102"
+      title: "String and numeric literal parsing"
+      priority: "P0"
+      complexity: 4
+      status: "COMPLETED"
+      category: "TMGR"
+      completion_date: "2025-08-23"
+      acceptance_criteria_met: true
+      quality_gates_passed: true
+      
+    - id: "RSYN-0103"
+      title: "Comment handling (line, block, doc)"
+      priority: "P0"
+      complexity: 2
+      status: "COMPLETED"
+      category: "TMGR"
+      completion_date: "2025-08-23"
+      acceptance_criteria_met: true
+      quality_gates_passed: true
+      
+    - id: "RSYN-0104"
+      title: "Function and type definition patterns"
+      priority: "P1"
+      complexity: 8
+      status: "PLANNED"
+      category: "TMGR"
+      
+    - id: "RSYN-0105"
+      title: "Actor syntax highlighting (<-, <?)"
+      priority: "P1"
+      complexity: 4
+      status: "PLANNED"
+      category: "TMGR"
+      
+    - id: "RSYN-0106"
+      title: "Pattern matching and lambda expressions"
+      priority: "P1"
+      complexity: 6
+      status: "PLANNED"
+      category: "TMGR"
+      
+    - id: "RSYN-0107"
+      title: "Context-sensitive type detection"
+      priority: "P1"
+      complexity: 8
+      status: "PLANNED"
+      category: "TMGR"
+      risk: "HIGH - May require grammar refactoring"
+      
+    - id: "RSYN-0108"
+      title: "Performance optimization (<25ms target)"
+      priority: "P0"
+      complexity: 4
+      status: "PLANNED"
+      category: "QUAL"
+      dependencies: ["RSYN-0101", "RSYN-0102", "RSYN-0103"]
+
+performance_targets:
+  highlight_latency_ms: 25
+  memory_usage_mb: 5
+  max_file_size_lines: 50000
+  test_coverage_percent: 100
+
+quality_gates:
+  build_warnings: 0
+  build_errors: 0
+  test_failures: 0
+  grammar_compliance: 100
+  documentation_coverage: 90
+
+tools:
+  build_system: "GNU Make"
+  grammar_compiler: "js-yaml, TextMate tools"
+  testing_framework: "Custom validation suite"
+  performance_monitoring: "Built-in benchmarks"
+  
+risk_assessment:
+  high_risk:
+    - item: "Grammar ambiguity resolution"
+      mitigation: "Early testing with complex examples"
+      probability: "Medium"
+    - item: "Performance target achievement"  
+      mitigation: "Benchmark-driven development"
+      probability: "Low"
+  
+  medium_risk:
+    - item: "Upstream acceptance timeline"
+      mitigation: "Early community engagement"
+      probability: "Medium"
+    - item: "Cross-platform compatibility"
+      mitigation: "Comprehensive testing matrix"
+      probability: "Low"
+
+success_metrics:
+  quantitative:
+    - metric: "Editor support count"
+      target: 5
+      current: 0
+    - metric: "Highlight performance (ms)"
+      target: 25
+      current: "TBD"
+    - metric: "Test coverage (%)"
+      target: 100
+      current: 0
+  
+  qualitative:
+    - "GitHub Linguist PR accepted"
+    - "VS Code Marketplace published"
+    - "Community adoption demonstrated"
+    - "Performance benchmarks met"

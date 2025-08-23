@@ -1,0 +1,23 @@
+# GitHub Linguist Heuristics for Ruchy
+# RSYN-0512: Linguist heuristics for disambiguation
+#
+# This should be added to github/linguist's lib/linguist/heuristics.yml
+
+disambiguations:
+  - extensions: ['.rhy']
+    rules:
+      - language: Ruchy
+        pattern: '^\s*(actor|spawn|<-|<\?|\>\>)'
+      - language: Ruchy
+        named_pattern: ruchy_actor
+      - language: Ruchy
+        and:
+          - named_pattern: ruchy_keywords
+          - named_pattern: ruchy_pipeline
+
+named_patterns:
+  ruchy_actor: '^\s*actor\s+[A-Z]\w*\s*\{'
+  ruchy_keywords: '\b(fn|let|mut|struct|enum|trait|impl|match|actor|spawn)\b'
+  ruchy_pipeline: '\s+>>\s+'
+  ruchy_send: '\s+<-\s+'
+  ruchy_ask: '\s+<\?\s+'

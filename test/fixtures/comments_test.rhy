@@ -1,0 +1,130 @@
+// Comment handling test cases
+// Tests all types of comments and annotations
+
+/// This is a documentation comment
+/// It supports **bold text** and *italic text*
+/// And `inline code` formatting
+/// @param name The user's name
+/// @return A greeting message
+fn greet(name: str) -> str {
+    // Regular line comment
+    format("Hello, {}", name)
+}
+
+/**
+ * This is a block documentation comment
+ * It can span multiple lines and supports:
+ * - **Bold text formatting**
+ * - *Italic text formatting*  
+ * - `Inline code snippets`
+ * - @param annotations
+ * - @return descriptions
+ * - @example usage examples
+ */
+struct User {
+    name: str,      // User's display name
+    email: str,     // Contact email address
+    age: int        // Age in years
+}
+
+/*
+ * Regular block comment
+ * Can span multiple lines
+ * Used for longer explanations
+ */
+impl User {
+    // TODO: Add email validation
+    // FIXME: Handle edge cases for age
+    fn new(name: str, email: str, age: int) -> User {
+        // NOTE: This is a simple constructor
+        User { name, email, age }
+    }
+    
+    /* HACK: Temporary workaround for database issue */
+    fn save(&self) -> Result<()> {
+        // BUG: This doesn't handle concurrent access
+        database::save_user(self)
+    }
+}
+
+// Testing comment edge cases
+fn test_comments() {
+    let url = "https://example.com"  // URLs in comments should work
+    let path = "/path/to/file"       // File paths too
+    
+    /* Nested block comments test
+       /* This is a nested comment
+          /* Even deeper nesting
+             // Line comments inside blocks
+          */
+          More nested content
+       */
+       Back to outer comment
+    */
+    
+    // Multiple line comments
+    // that continue
+    // on several lines
+    
+    /// Documentation that gets
+    /// split across multiple
+    /// single-line doc comments
+    let documented_var = 42
+    
+    // Code with comments inline
+    let result = calculate(x, y)  // TODO: Optimize this calculation
+    process(result)               // FIXME: Error handling needed
+}
+
+// SATD (Self-Admitted Technical Debt) annotations
+fn technical_debt_examples() {
+    // SATD: This needs refactoring when we have more time
+    let legacy_code = old_implementation()
+    
+    // DEBT: Performance bottleneck identified here
+    let slow_operation = expensive_computation()
+    
+    // WORKAROUND: Temporary fix for upstream bug #1234
+    let patched_result = apply_workaround(input)
+    
+    // TEMPORARY: Remove this when new API is ready
+    let temp_solution = fallback_implementation()
+}
+
+/// Documentation with code examples
+/// ```ruchy
+/// let user = User::new("Alice", "alice@example.com", 30);
+/// user.save()?;
+/// ```
+/// 
+/// # Safety
+/// This function is marked as unsafe because...
+/// 
+/// # Examples
+/// ```
+/// let result = unsafe_operation(&data);
+/// ```
+unsafe fn unsafe_operation(data: &[u8]) -> Result<ProcessedData> {
+    // XXX: This bypasses normal safety checks
+    unsafe_process_raw_data(data)
+}
+
+// Comment variations and edge cases
+fn edge_cases() {
+    let not_a_comment = "This // is not a comment"
+    let also_not_comment = "Neither /* is this */"
+    
+    // Comment with special characters: 你好, мир, 🌍
+    // Comment with symbols: @#$%^&*()_+-={}[]|;:'".,<>?/~`
+    
+    /* Comment with escaped characters: \" \' \\ \n \t */
+    
+    /// Comment with URLs: https://github.com/rust-lang/rust
+    /// And email addresses: someone@example.com
+    
+    // FIXME: Edge case - what about // inside strings?
+    let tricky = "This string has // comment-like content"
+    
+    /* HACK: What about /* inside strings? */
+    let also_tricky = "String with /* block comment syntax */"
+}

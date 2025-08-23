@@ -1,0 +1,263 @@
+// Pattern matching, lambdas, and actor syntax test cases
+// Tests comprehensive parsing of advanced language constructs
+
+/// Enhanced actor with generic message types
+actor DataProcessor<T> where T: Send + Sync {
+    let mut buffer: Vec<T> = Vec::new()
+    let mut config: ProcessingConfig
+    
+    fn handle(msg: ProcessorMessage<T>) -> Result<ProcessorResponse> {
+        match msg {
+            Process { data, callback } => {
+                let result = self.process_item(data)?
+                callback <- Ok(result)
+                Ok(ProcessorResponse::Processed)
+            }
+            BatchProcess { items, batch_size } => {
+                let batches = items
+                    .chunks(batch_size)
+                    .map(|chunk| self.process_batch(chunk))
+                    .collect::<Result<Vec<_>>>()?
+                
+                Ok(ProcessorResponse::BatchProcessed(batches))
+            }
+            GetStats => {
+                let stats = ProcessorStats {
+                    buffer_size: self.buffer.len(),
+                    processed_count: self.processed_count
+                }
+                Ok(ProcessorResponse::Stats(stats))
+            }
+            Shutdown { graceful } => {
+                if graceful {
+                    self.flush_buffer()?
+                }
+                Ok(ProcessorResponse::ShutdownComplete)
+            }
+        }
+    }
+}
+
+// Pattern matching examples
+fn pattern_matching_examples() {
+    let value = Some(42)
+    
+    // Basic pattern matching
+    match value {
+        Some(x) if x > 0 => println("Positive: {}", x),
+        Some(x) if x < 0 => println("Negative: {}", x),
+        Some(0) => println("Zero"),
+        None => println("No value")
+    }
+    
+    // Range patterns
+    match score {
+        0..=59 => "F",
+        60..=69 => "D", 
+        70..=79 => "C",
+        80..=89 => "B",
+        90..=100 => "A",
+        _ => "Invalid score"
+    }
+    
+    // Destructuring patterns
+    match point {
+        Point { x: 0, y: 0 } => "Origin",
+        Point { x: 0, y } => format("On Y-axis at {}", y),
+        Point { x, y: 0 } => format("On X-axis at {}", x),
+        Point { x, y } => format("Point at ({}, {})", x, y)
+    }
+    
+    // Enum variant patterns
+    match message {
+        Message::Quit => break,
+        Message::Move { x, y } => {
+            position.x += x
+            position.y += y
+        },
+        Message::Write(text) => {
+            output.write(text)
+        },
+        Message::ChangeColor(r, g, b) => {
+            color = Color::new(r, g, b)
+        }
+    }
+    
+    // Reference patterns
+    match &data {
+        &mut ref expensive_data => {
+            // Avoid cloning expensive data
+            process_borrowed(expensive_data)
+        },
+        &simple_data => {
+            // Can work with copy
+            process_owned(simple_data)
+        }
+    }
+    
+    // Nested patterns
+    match nested_option {
+        Some(Some(value)) => println("Double wrapped: {}", value),
+        Some(None) => println("Outer some, inner none"),
+        None => println("Outer none")
+    }
+    
+    // Tuple patterns
+    match coordinates {
+        (0, 0, 0) => "Origin in 3D",
+        (x, 0, 0) => format("On X-axis at {}", x),
+        (0, y, 0) => format("On Y-axis at {}", y), 
+        (0, 0, z) => format("On Z-axis at {}", z),
+        (x, y, z) => format("Point at ({}, {}, {})", x, y, z)
+    }
+}
+
+// Lambda and closure examples
+fn lambda_examples() {
+    // Simple lambdas
+    let double = |x| x * 2
+    let add = |a, b| a + b
+    let greet = |name: str| format("Hello, {}!", name)
+    
+    // Lambdas with type annotations
+    let processor: fn(int) -> str = |value: int| -> str {
+        if value > 0 {
+            format("Positive: {}", value)
+        } else {
+            format("Non-positive: {}", value)
+        }
+    }
+    
+    // Closure capturing variables
+    let multiplier = 3
+    let multiply_by_three = |x| x * multiplier
+    
+    // Move closures
+    let data = vec![1, 2, 3, 4, 5]
+    let owned_processor = move |item| {
+        data.contains(&item)  // data is moved into closure
+    }
+    
+    // Destructuring in lambdas
+    let process_point = |Point { x, y }| {
+        x + y
+    }
+    
+    // Multi-line lambdas
+    let complex_processor = |input: ProcessingInput| -> ProcessingResult {
+        let validated = input.validate()?
+        let transformed = validated.transform()
+        let result = transformed.finalize()
+        
+        Ok(result)
+    }
+    
+    // Higher-order function usage
+    let numbers = vec![1, 2, 3, 4, 5]
+    let processed = numbers
+        .iter()
+        .filter(|&&x| x > 2)
+        .map(|&x| x * 2)
+        .collect::<Vec<_>>()
+    
+    // Chained functional operations
+    let result = data
+        .into_iter()
+        .enumerate()
+        .filter(|(i, _)| i % 2 == 0)
+        .map(|(_, value)| value.process())
+        .filter_map(|result| result.ok())
+        .collect::<Vec<_>>()
+}
+
+// Actor system usage examples
+fn actor_system_examples() {
+    // Spawning actors
+    let counter = spawn_actor(Counter::new())
+    let processor = spawn_actor(DataProcessor::<String>::new())
+    let supervisor = spawn_actor(Supervisor::new())
+    
+    // Message sending (`<-`)
+    counter <- Increment(5)
+    counter <- Decrement(2)
+    processor <- Process {
+        data: "input data".to_string(),
+        callback: response_handler
+    }
+    
+    // Message asking (`<?`)
+    let current_count = counter <? GetCount
+    let stats = processor <? GetStats
+    let health = supervisor <? HealthCheck
+    
+    // Handling responses
+    match current_count {
+        Ok(count) => println("Current count: {}", count),
+        Err(timeout) => println("Actor didn't respond in time")
+    }
+    
+    // Actor supervision
+    supervisor <- Supervise(counter)
+    supervisor <- Supervise(processor)
+    
+    // Graceful shutdown
+    processor <- Shutdown { graceful: true }
+    supervisor <- TerminateAll
+    
+    // Actor composition
+    let pipeline = ActorPipeline::new()
+        .add_stage(preprocessor)
+        .add_stage(validator)
+        .add_stage(processor)
+        .add_stage(postprocessor)
+    
+    // Processing with pipeline
+    pipeline <- ProcessItem(input_data)
+    
+    // Actor pools
+    let worker_pool = ActorPool::new(
+        "workers", 
+        4, 
+        || Worker::new()
+    )
+    
+    worker_pool <- WorkItem(task)
+}
+
+// Complex pattern matching with guards
+fn advanced_patterns() {
+    match request {
+        HttpRequest { 
+            method: "GET", 
+            path, 
+            headers 
+        } if path.starts_with("/api/") => {
+            handle_api_get(path, headers)
+        },
+        HttpRequest { 
+            method: "POST", 
+            path: "/auth/login",
+            body: Some(credentials)
+        } if credentials.is_valid() => {
+            authenticate(credentials)
+        },
+        HttpRequest { method, .. } if !ALLOWED_METHODS.contains(&method) => {
+            HttpResponse::method_not_allowed()
+        },
+        _ => HttpResponse::not_found()
+    }
+    
+    // Pattern matching with complex conditions
+    match (temperature, humidity, pressure) {
+        (t, h, p) if t > 30.0 && h > 80.0 && p < 1000.0 => {
+            Weather::Storm
+        },
+        (t, h, _) if t > 25.0 && h < 50.0 => {
+            Weather::Hot
+        },
+        (t, _, _) if t < 0.0 => {
+            Weather::Freezing
+        },
+        _ => Weather::Mild
+    }
+}

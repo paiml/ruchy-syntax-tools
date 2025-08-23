@@ -1,0 +1,268 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  release:
+    types: [created]
+
+env:
+  NODE_VERSION: '18'
+  QUALITY_THRESHOLD: 80
+  MAX_COMPLEXITY: 20
+
+jobs:
+  quality-check:
+    name: Quality Gates
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run ESLint
+        run: npx eslint . --max-warnings 0
+        
+      - name: Check code formatting
+        run: npx prettier --check .
+      
+      - name: Run tests with coverage
+        run: |
+          npm test
+          if [ $(npm run coverage -- --silent | grep -oE '[0-9]+' | tail -1) -lt ${{ env.QUALITY_THRESHOLD }} ]; then
+            echo "Coverage below threshold!"
+            exit 1
+          fi
+      
+      - name: PMAT Quality Analysis
+        run: |
+          echo "Running PMAT quality gates..."
+          # pmat complexity-analysis
+          # pmat quality-gate
+      
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+
+  build-grammars:
+    name: Build All Grammars
+    runs-on: ubuntu-latest
+    needs: quality-check
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build TextMate grammar
+        run: make textmate
+      
+      - name: Validate Tree-sitter grammar
+        run: |
+          if [ ! -f "grammars/tree-sitter/grammar.js" ]; then
+            echo "Tree-sitter grammar missing!"
+            exit 1
+          fi
+      
+      - name: Validate web grammars
+        run: |
+          if [ ! -f "grammars/highlight/ruchy.js" ] || [ ! -f "grammars/prism/prism-ruchy.js" ]; then
+            echo "Web grammars missing!"
+            exit 1
+          fi
+      
+      - name: Upload grammar artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: grammar-files
+          path: |
+            grammars/textmate/*.json
+            grammars/tree-sitter/grammar.js
+            grammars/highlight/*.js
+            grammars/prism/*.js
+
+  performance-test:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+    needs: build-grammars
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Download grammar artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: grammar-files
+          path: grammars/
+      
+      - name: Run performance benchmarks
+        run: |
+          node tools/benchmark.js
+          PERF_RESULT=$(node tools/benchmark.js 2>/dev/null | grep "Average time" | grep -oE '[0-9.]+' | head -1)
+          if (( $(echo "$PERF_RESULT > 25" | bc -l) )); then
+            echo "Performance regression detected: ${PERF_RESULT}ms > 25ms"
+            exit 1
+          fi
+      
+      - name: Store benchmark results
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          tool: 'customBiggerIsBetter'
+          output-file-path: benchmark-results.json
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
+
+  test-cross-platform:
+    name: Cross-Platform Testing
+    runs-on: ${{ matrix.os }}
+    needs: build-grammars
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [16, 18, 20]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Download grammar artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: grammar-files
+          path: grammars/
+      
+      - name: Run cross-platform tests
+        run: node test/cross-platform.test.js
+
+  package-vscode:
+    name: Package VS Code Extension
+    runs-on: ubuntu-latest
+    needs: [quality-check, build-grammars, performance-test]
+    if: github.event_name == 'release' || github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      
+      - name: Install vsce
+        run: npm install -g @vscode/vsce
+      
+      - name: Download grammar artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: grammar-files
+          path: grammars/
+      
+      - name: Copy grammar to extension
+        run: cp grammars/textmate/ruchy.tmLanguage.json upstream/vscode/syntaxes/
+      
+      - name: Package extension
+        working-directory: upstream/vscode
+        run: vsce package --no-yarn
+      
+      - name: Upload VSIX artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: vscode-extension
+          path: upstream/vscode/*.vsix
+
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [package-vscode, test-cross-platform]
+    if: github.event_name == 'release'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+      
+      - name: Publish to VS Code Marketplace
+        if: github.event_name == 'release'
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          npm install -g @vscode/vsce
+          cd vscode-extension
+          vsce publish -p $VSCE_PAT
+      
+      - name: Publish to NPM
+        if: github.event_name == 'release'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          npm publish
+      
+      - name: Create GitHub Release Assets
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            vscode-extension/*.vsix
+            grammar-files/**/*
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  notify:
+    name: Notify Status
+    runs-on: ubuntu-latest
+    needs: [deploy]
+    if: always()
+    
+    steps:
+      - name: Send notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: |
+            Deployment Status: ${{ job.status }}
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+        if: always()

@@ -1,0 +1,123 @@
+// Error handling patterns in Ruchy
+// Tests Result type and error propagation syntax
+
+use std::io
+
+/// File processing with error handling
+fn process_file(path: str) -> Result<str> {
+    let contents = fs::read_to_string(path)?
+    let processed = contents
+        >> trim()
+        >> validate_format()
+        >> transform_content()
+    
+    match processed {
+        Ok(data) => {
+            log::info("File processed successfully")
+            Ok(data)
+        }
+        Err(e) => {
+            log::error("Processing failed: {}", e)
+            Err(e)
+        }
+    }
+}
+
+/// Custom error types
+enum ProcessingError {
+    InvalidFormat(str),
+    IOError(io::Error),
+    ValidationFailed { 
+        field: str, 
+        reason: str 
+    }
+}
+
+impl ProcessingError {
+    fn message(&self) -> str {
+        match self {
+            InvalidFormat(msg) => format("Invalid format: {}", msg)
+            IOError(err) => format("IO error: {}", err)
+            ValidationFailed { field, reason } => {
+                format("Validation failed for '{}': {}", field, reason)
+            }
+        }
+    }
+}
+
+/// Result type usage patterns
+fn divide_safe(a: float, b: float) -> Result<float> {
+    if b == 0.0 {
+        Err("Division by zero")
+    } else {
+        Ok(a / b)
+    }
+}
+
+fn calculate_average(numbers: Vec<float>) -> Result<float> {
+    if numbers.is_empty() {
+        return Err("Empty list provided")
+    }
+    
+    let sum = numbers.iter().sum()
+    let count = numbers.len() as float
+    
+    divide_safe(sum, count)
+}
+
+/// Option type patterns  
+fn find_user(id: int) -> Option<User> {
+    match database.get(id) {
+        Some(user) if user.active => Some(user)
+        Some(_) => None  // User exists but inactive
+        None => None     // User not found
+    }
+}
+
+fn get_user_name(id: int) -> str {
+    find_user(id)
+        .map(|user| user.name)
+        .unwrap_or("Unknown User")
+}
+
+/// Error propagation with ? operator
+fn complex_operation() -> Result<Data> {
+    let step1 = validate_input()?
+    let step2 = process_data(step1)?
+    let step3 = finalize_result(step2)?
+    
+    Ok(step3)
+}
+
+/// Multiple error types
+fn network_request(url: str) -> Result<Response, NetworkError> {
+    let client = HttpClient::new()?
+    let response = client.get(url)?
+    
+    if response.status().is_success() {
+        Ok(response)
+    } else {
+        Err(NetworkError::HttpError(response.status()))
+    }
+}
+
+/// Early returns with error handling
+fn validate_user_data(data: UserData) -> Result<ValidatedUser> {
+    if data.email.is_empty() {
+        return Err("Email is required")
+    }
+    
+    if !data.email.contains("@") {
+        return Err("Invalid email format")
+    }
+    
+    if data.age < 0 || data.age > 150 {
+        return Err("Invalid age range")
+    }
+    
+    Ok(ValidatedUser {
+        email: data.email,
+        age: data.age,
+        validated_at: now()
+    })
+}

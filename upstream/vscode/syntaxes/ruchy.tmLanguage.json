@@ -1,0 +1,1182 @@
+{
+  "name": "Ruchy",
+  "scopeName": "source.ruchy",
+  "fileTypes": [
+    "rhy",
+    "ruchy"
+  ],
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#type-definitions"
+    },
+    {
+      "include": "#types"
+    },
+    {
+      "include": "#functions"
+    },
+    {
+      "include": "#actors"
+    },
+    {
+      "include": "#lambdas"
+    },
+    {
+      "include": "#patterns"
+    },
+    {
+      "include": "#punctuation"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.documentation.ruchy",
+          "begin": "///(?!/)",
+          "end": "$",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.documentation.ruchy"
+            }
+          },
+          "patterns": [
+            {
+              "name": "markup.bold.comment.ruchy",
+              "match": "\\*\\*[^*]+\\*\\*"
+            },
+            {
+              "name": "markup.italic.comment.ruchy",
+              "match": "\\*[^*]+\\*"
+            },
+            {
+              "name": "markup.inline.code.comment.ruchy",
+              "match": "`[^`]+`"
+            }
+          ]
+        },
+        {
+          "name": "comment.block.documentation.ruchy",
+          "begin": "/\\*\\*(?!\\*)",
+          "end": "\\*/",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.documentation.begin.ruchy"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.documentation.end.ruchy"
+            }
+          },
+          "patterns": [
+            {
+              "name": "markup.bold.comment.ruchy",
+              "match": "\\*\\*[^*]+\\*\\*"
+            },
+            {
+              "name": "markup.italic.comment.ruchy",
+              "match": "\\*[^*]+\\*"
+            },
+            {
+              "name": "markup.inline.code.comment.ruchy",
+              "match": "`[^`]+`"
+            },
+            {
+              "name": "keyword.other.documentation.ruchy",
+              "match": "@\\w+"
+            }
+          ]
+        },
+        {
+          "name": "comment.line.double-slash.ruchy",
+          "begin": "//(?!/)",
+          "end": "$",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.ruchy"
+            }
+          },
+          "patterns": [
+            {
+              "name": "keyword.codetag.notation.ruchy",
+              "match": "\\b(TODO|FIXME|NOTE|BUG|HACK|XXX)\\b"
+            },
+            {
+              "name": "invalid.deprecated.satd.ruchy",
+              "match": "\\b(SATD|DEBT|WORKAROUND|TEMPORARY)\\b"
+            }
+          ]
+        },
+        {
+          "name": "comment.block.ruchy",
+          "begin": "/\\*(?!\\*)",
+          "end": "\\*/",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.begin.ruchy"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.end.ruchy"
+            }
+          },
+          "patterns": [
+            {
+              "name": "keyword.codetag.notation.ruchy",
+              "match": "\\b(TODO|FIXME|NOTE|BUG|HACK|XXX)\\b"
+            },
+            {
+              "name": "invalid.deprecated.satd.ruchy",
+              "match": "\\b(SATD|DEBT|WORKAROUND|TEMPORARY)\\b"
+            },
+            {
+              "name": "comment.block.nested.ruchy",
+              "begin": "/\\*",
+              "end": "\\*/",
+              "patterns": [
+                {
+                  "include": "#comments"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.ruchy",
+          "begin": "\"",
+          "end": "\"|(?=\\n)",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.ruchy"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.ruchy"
+            }
+          },
+          "patterns": [
+            {
+              "name": "constant.character.escape.ruchy",
+              "match": "\\\\(?:[\\\\'\"nrt0]|x[0-9a-fA-F]{2}|u\\{[0-9a-fA-F]{1,6}\\})"
+            },
+            {
+              "name": "meta.interpolation.ruchy",
+              "begin": "\\$\\{",
+              "end": "\\}",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.interpolation.begin.ruchy"
+                }
+              },
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.interpolation.end.ruchy"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "$self"
+                }
+              ]
+            },
+            {
+              "name": "invalid.illegal.escape.ruchy",
+              "match": "\\\\(?:[^\\\\'\"nrt0xu]|x[^0-9a-fA-F]|x[0-9a-fA-F](?![0-9a-fA-F])|u(?!\\{)|u\\{[^0-9a-fA-F}]*\\})"
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.ruchy",
+          "begin": "'",
+          "end": "'|(?=\n)",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.ruchy"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.ruchy"
+            }
+          },
+          "patterns": [
+            {
+              "name": "constant.character.escape.ruchy",
+              "match": "\\\\(?:[\\\\'\"nrt0]|x[0-9a-fA-F]{2})"
+            },
+            {
+              "name": "invalid.illegal.escape.ruchy",
+              "match": "\\\\(?:[^\\\\'\"nrt0x]|x[^0-9a-fA-F]|x[0-9a-fA-F](?![0-9a-fA-F]))"
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.raw.ruchy",
+          "begin": "r\"",
+          "end": "\"",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.ruchy"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.ruchy"
+            }
+          }
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.float.ruchy",
+          "match": "\\b\\d+\\.\\d+([eE][+-]?\\d+)?[fF]?\\b"
+        },
+        {
+          "name": "constant.numeric.float.scientific.ruchy",
+          "match": "\\b\\d+[eE][+-]?\\d+[fF]?\\b"
+        },
+        {
+          "name": "constant.numeric.float.no-leading-digits.ruchy",
+          "match": "\\b\\.\\d+([eE][+-]?\\d+)?[fF]?\\b"
+        },
+        {
+          "name": "constant.numeric.integer.hex.ruchy",
+          "match": "\\b0[xX][0-9a-fA-F]+(?:_[0-9a-fA-F]+)*[uUiI]?(?:8|16|32|64|128)?\\b"
+        },
+        {
+          "name": "constant.numeric.integer.binary.ruchy",
+          "match": "\\b0[bB][01]+(?:_[01]+)*[uUiI]?(?:8|16|32|64|128)?\\b"
+        },
+        {
+          "name": "constant.numeric.integer.octal.ruchy",
+          "match": "\\b0[oO][0-7]+(?:_[0-7]+)*[uUiI]?(?:8|16|32|64|128)?\\b"
+        },
+        {
+          "name": "constant.numeric.integer.decimal.ruchy",
+          "match": "\\b\\d+(?:_\\d+)*[uUiI]?(?:8|16|32|64|128)?\\b"
+        },
+        {
+          "name": "invalid.illegal.number.ruchy",
+          "match": "\\b0[xXbBoO](?![0-9a-fA-F_01_0-7])"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.ruchy",
+          "match": "\\b(if|else|match|case|for|while|loop|break|continue|return)\\b"
+        },
+        {
+          "name": "keyword.declaration.ruchy",
+          "match": "\\b(let|fn|type|struct|enum|impl|trait|mod|use)\\b"
+        },
+        {
+          "name": "storage.modifier.ruchy",
+          "match": "\\b(pub|mut|async|unsafe)\\b"
+        },
+        {
+          "name": "keyword.other.ruchy",
+          "match": "\\b(self|Self|super|as|in|where)\\b"
+        },
+        {
+          "name": "constant.language.ruchy",
+          "match": "\\b(true|false|nil)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.pipeline.ruchy",
+          "match": ">>"
+        },
+        {
+          "name": "keyword.operator.actor.ruchy",
+          "match": "(<-|<\\?)"
+        },
+        {
+          "name": "keyword.operator.arithmetic.ruchy",
+          "match": "(\\+|-|\\*|/|%|\\*\\*)"
+        },
+        {
+          "name": "keyword.operator.comparison.ruchy",
+          "match": "(==|!=|<|>|<=|>=)"
+        },
+        {
+          "name": "keyword.operator.logical.ruchy",
+          "match": "(&&|\\|\\||!)"
+        },
+        {
+          "name": "keyword.operator.assignment.ruchy",
+          "match": "(=|\\+=|-=|\\*=|/=|%=)"
+        },
+        {
+          "name": "keyword.operator.type.ruchy",
+          "match": "(::|->=|=>)"
+        },
+        {
+          "name": "keyword.operator.pattern.ruchy",
+          "match": "(\\.\\.|_|\\|)"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "entity.name.type.ruchy",
+          "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+        },
+        {
+          "name": "entity.name.type.parameter.ruchy",
+          "match": "(?<=<)[A-Z][a-zA-Z0-9_]*(?=[,>])"
+        },
+        {
+          "name": "support.type.primitive.ruchy",
+          "match": "\\b(int|float|bool|str|char)\\b"
+        },
+        {
+          "name": "support.type.result.ruchy",
+          "match": "\\b(Result|Option|Ok|Err|Some|None)\\b"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "meta.function.definition.ruchy",
+          "begin": "\\b(fn)\\s+([a-z_][a-zA-Z0-9_]*)\\s*(?=<|[\\(\\{])",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.declaration.function.ruchy"
+            },
+            "2": {
+              "name": "entity.name.function.ruchy"
+            }
+          },
+          "end": "(?<=\\})",
+          "patterns": [
+            {
+              "include": "#generic-parameters"
+            },
+            {
+              "include": "#function-parameters"
+            },
+            {
+              "include": "#function-return-type"
+            },
+            {
+              "include": "#where-clause"
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        },
+        {
+          "name": "meta.function.call.associated.ruchy",
+          "match": "([A-Z][a-zA-Z0-9_]*)::([\\w]+)\\s*(?=\\()",
+          "captures": {
+            "1": {
+              "name": "entity.name.type.ruchy"
+            },
+            "2": {
+              "name": "entity.name.function.call.ruchy"
+            }
+          }
+        },
+        {
+          "name": "meta.function.call.method.ruchy",
+          "match": "\\.([a-z_][a-zA-Z0-9_]*)\\s*(?=\\()",
+          "captures": {
+            "1": {
+              "name": "entity.name.function.call.method.ruchy"
+            }
+          }
+        },
+        {
+          "name": "meta.function.call.ruchy",
+          "match": "([a-z_][a-zA-Z0-9_]*)\\s*(?=\\()",
+          "captures": {
+            "1": {
+              "name": "entity.name.function.call.ruchy"
+            }
+          }
+        },
+        {
+          "name": "meta.macro.ruchy",
+          "match": "([a-z_][a-zA-Z0-9_]*!)\\s*(?=\\(|\\{|\\[)",
+          "captures": {
+            "1": {
+              "name": "entity.name.function.macro.ruchy"
+            }
+          }
+        }
+      ]
+    },
+    "generic-parameters": {
+      "patterns": [
+        {
+          "name": "meta.generic.ruchy",
+          "begin": "<",
+          "end": ">",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.generic.begin.ruchy"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.generic.end.ruchy"
+            }
+          },
+          "patterns": [
+            {
+              "name": "entity.name.type.parameter.ruchy",
+              "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+            },
+            {
+              "name": "keyword.operator.constraint.ruchy",
+              "match": ":"
+            },
+            {
+              "name": "keyword.operator.lifetime.ruchy",
+              "match": "'"
+            },
+            {
+              "include": "#types"
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        }
+      ]
+    },
+    "function-parameters": {
+      "patterns": [
+        {
+          "name": "meta.function.parameters.ruchy",
+          "begin": "\\(",
+          "end": "\\)",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.parameters.begin.ruchy"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.parameters.end.ruchy"
+            }
+          },
+          "patterns": [
+            {
+              "name": "variable.parameter.self.ruchy",
+              "match": "\\b(self|&self|&mut\\s+self|mut\\s+self)\\b"
+            },
+            {
+              "name": "meta.parameter.ruchy",
+              "match": "\\b([a-z_][a-zA-Z0-9_]*)\\s*:\\s*",
+              "captures": {
+                "1": {
+                  "name": "variable.parameter.ruchy"
+                }
+              }
+            },
+            {
+              "name": "meta.parameter.destructured.ruchy",
+              "begin": "\\{",
+              "end": "\\}",
+              "patterns": [
+                {
+                  "name": "variable.parameter.ruchy",
+                  "match": "[a-z_][a-zA-Z0-9_]*"
+                },
+                {
+                  "include": "$self"
+                }
+              ]
+            },
+            {
+              "include": "#types"
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        }
+      ]
+    },
+    "function-return-type": {
+      "patterns": [
+        {
+          "name": "meta.function.return-type.ruchy",
+          "begin": "->",
+          "end": "(?=\\{|where)",
+          "beginCaptures": {
+            "0": {
+              "name": "keyword.operator.type.ruchy"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#types"
+            },
+            {
+              "include": "#generic-parameters"
+            }
+          ]
+        }
+      ]
+    },
+    "where-clause": {
+      "patterns": [
+        {
+          "name": "meta.where-clause.ruchy",
+          "begin": "\\bwhere\\b",
+          "end": "(?=\\{)",
+          "beginCaptures": {
+            "0": {
+              "name": "keyword.other.ruchy"
+            }
+          },
+          "patterns": [
+            {
+              "name": "entity.name.type.parameter.ruchy",
+              "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+            },
+            {
+              "name": "keyword.operator.constraint.ruchy",
+              "match": ":"
+            },
+            {
+              "include": "#types"
+            }
+          ]
+        }
+      ]
+    },
+    "type-definitions": {
+      "patterns": [
+        {
+          "name": "meta.struct.ruchy",
+          "begin": "\\b(struct)\\s+([A-Z][a-zA-Z0-9_]*)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.declaration.struct.ruchy"
+            },
+            "2": {
+              "name": "entity.name.type.struct.ruchy"
+            }
+          },
+          "end": "(?<=\\})|(?=;)",
+          "patterns": [
+            {
+              "include": "#generic-parameters"
+            },
+            {
+              "include": "#where-clause"
+            },
+            {
+              "include": "#struct-body"
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        },
+        {
+          "name": "meta.enum.ruchy",
+          "begin": "\\b(enum)\\s+([A-Z][a-zA-Z0-9_]*)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.declaration.enum.ruchy"
+            },
+            "2": {
+              "name": "entity.name.type.enum.ruchy"
+            }
+          },
+          "end": "(?<=\\})",
+          "patterns": [
+            {
+              "include": "#generic-parameters"
+            },
+            {
+              "include": "#where-clause"
+            },
+            {
+              "include": "#enum-body"
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        },
+        {
+          "name": "meta.type.alias.ruchy",
+          "begin": "\\b(type)\\s+([A-Z][a-zA-Z0-9_]*)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.declaration.type.ruchy"
+            },
+            "2": {
+              "name": "entity.name.type.alias.ruchy"
+            }
+          },
+          "end": ";",
+          "patterns": [
+            {
+              "include": "#generic-parameters"
+            },
+            {
+              "include": "#where-clause"
+            },
+            {
+              "name": "keyword.operator.assignment.ruchy",
+              "match": "="
+            },
+            {
+              "include": "#types"
+            }
+          ]
+        },
+        {
+          "name": "meta.trait.ruchy",
+          "begin": "\\b(trait)\\s+([A-Z][a-zA-Z0-9_]*)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.declaration.trait.ruchy"
+            },
+            "2": {
+              "name": "entity.name.type.trait.ruchy"
+            }
+          },
+          "end": "(?<=\\})",
+          "patterns": [
+            {
+              "include": "#generic-parameters"
+            },
+            {
+              "include": "#where-clause"
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        },
+        {
+          "name": "meta.impl.ruchy",
+          "begin": "\\b(impl)\\s*(?:<[^>]*>)?\\s*([A-Z][a-zA-Z0-9_]*(?:<[^>]*>)?)\\s*(?:(for)\\s+([A-Z][a-zA-Z0-9_]*(?:<[^>]*>)?))?\\s*",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.declaration.impl.ruchy"
+            },
+            "2": {
+              "name": "entity.name.type.ruchy"
+            },
+            "3": {
+              "name": "keyword.other.ruchy"
+            },
+            "4": {
+              "name": "entity.name.type.ruchy"
+            }
+          },
+          "end": "(?<=\\})",
+          "patterns": [
+            {
+              "include": "#where-clause"
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        }
+      ]
+    },
+    "struct-body": {
+      "patterns": [
+        {
+          "name": "meta.struct.body.ruchy",
+          "begin": "\\{",
+          "end": "\\}",
+          "patterns": [
+            {
+              "name": "meta.field.ruchy",
+              "match": "\\b([a-z_][a-zA-Z0-9_]*)\\s*:\\s*",
+              "captures": {
+                "1": {
+                  "name": "variable.other.member.ruchy"
+                }
+              }
+            },
+            {
+              "name": "storage.modifier.visibility.ruchy",
+              "match": "\\bpub\\b"
+            },
+            {
+              "include": "#types"
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        }
+      ]
+    },
+    "enum-body": {
+      "patterns": [
+        {
+          "name": "meta.enum.body.ruchy",
+          "begin": "\\{",
+          "end": "\\}",
+          "patterns": [
+            {
+              "name": "meta.enum.variant.ruchy",
+              "match": "\\b([A-Z][a-zA-Z0-9_]*)\\s*(?=[\\(\\{,\\}])",
+              "captures": {
+                "1": {
+                  "name": "entity.name.type.variant.ruchy"
+                }
+              }
+            },
+            {
+              "name": "meta.enum.variant.tuple.ruchy",
+              "begin": "\\b([A-Z][a-zA-Z0-9_]*)\\s*\\(",
+              "beginCaptures": {
+                "1": {
+                  "name": "entity.name.type.variant.ruchy"
+                }
+              },
+              "end": "\\)",
+              "patterns": [
+                {
+                  "include": "#types"
+                }
+              ]
+            },
+            {
+              "name": "meta.enum.variant.struct.ruchy",
+              "begin": "\\b([A-Z][a-zA-Z0-9_]*)\\s*\\{",
+              "beginCaptures": {
+                "1": {
+                  "name": "entity.name.type.variant.ruchy"
+                }
+              },
+              "end": "\\}",
+              "patterns": [
+                {
+                  "include": "#struct-body"
+                }
+              ]
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        }
+      ]
+    },
+    "actors": {
+      "patterns": [
+        {
+          "name": "meta.actor.definition.ruchy",
+          "begin": "\\b(actor)\\s+([A-Z][a-zA-Z0-9_]*)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.declaration.actor.ruchy"
+            },
+            "2": {
+              "name": "entity.name.type.actor.ruchy"
+            }
+          },
+          "end": "(?<=\\})",
+          "patterns": [
+            {
+              "include": "#generic-parameters"
+            },
+            {
+              "include": "#where-clause"
+            },
+            {
+              "include": "#actor-body"
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        },
+        {
+          "name": "meta.actor.spawn.ruchy",
+          "match": "\\b(spawn_actor|spawn)\\s*\\(",
+          "captures": {
+            "1": {
+              "name": "entity.name.function.spawn.ruchy"
+            }
+          }
+        },
+        {
+          "name": "meta.actor.send.ruchy",
+          "match": "([a-z_][a-zA-Z0-9_]*)\\s*(<-)\\s*",
+          "captures": {
+            "1": {
+              "name": "variable.other.actor.ruchy"
+            },
+            "2": {
+              "name": "keyword.operator.actor.send.ruchy"
+            }
+          }
+        },
+        {
+          "name": "meta.actor.ask.ruchy",
+          "match": "([a-z_][a-zA-Z0-9_]*)\\s*(<\\?)\\s*",
+          "captures": {
+            "1": {
+              "name": "variable.other.actor.ruchy"
+            },
+            "2": {
+              "name": "keyword.operator.actor.ask.ruchy"
+            }
+          }
+        },
+        {
+          "name": "meta.actor.handle.ruchy",
+          "begin": "\\b(fn)\\s+(handle)\\s*\\(",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.declaration.function.ruchy"
+            },
+            "2": {
+              "name": "entity.name.function.actor.handle.ruchy"
+            }
+          },
+          "end": "(?<=\\})",
+          "patterns": [
+            {
+              "include": "#function-parameters"
+            },
+            {
+              "include": "#function-return-type"
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        },
+        {
+          "name": "meta.actor.supervisor.ruchy",
+          "match": "\\b(supervisor|supervise|restart|terminate)\\b",
+          "captures": {
+            "1": {
+              "name": "keyword.control.actor.ruchy"
+            }
+          }
+        }
+      ]
+    },
+    "actor-body": {
+      "patterns": [
+        {
+          "name": "meta.actor.body.ruchy",
+          "begin": "\\{",
+          "end": "\\}",
+          "patterns": [
+            {
+              "name": "meta.actor.state.ruchy",
+              "match": "\\b(let|mut)\\s+([a-z_][a-zA-Z0-9_]*)\\s*:",
+              "captures": {
+                "1": {
+                  "name": "keyword.declaration.ruchy"
+                },
+                "2": {
+                  "name": "variable.other.member.actor.ruchy"
+                }
+              }
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        }
+      ]
+    },
+    "lambdas": {
+      "patterns": [
+        {
+          "name": "meta.function.lambda.ruchy",
+          "begin": "\\|",
+          "end": "\\|",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.lambda.begin.ruchy"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.lambda.end.ruchy"
+            }
+          },
+          "patterns": [
+            {
+              "name": "meta.lambda.parameter.typed.ruchy",
+              "match": "\\b([a-z_][a-zA-Z0-9_]*)\\s*:\\s*",
+              "captures": {
+                "1": {
+                  "name": "variable.parameter.lambda.ruchy"
+                }
+              }
+            },
+            {
+              "name": "variable.parameter.lambda.ruchy",
+              "match": "[a-z_][a-zA-Z0-9_]*"
+            },
+            {
+              "name": "meta.lambda.parameter.destructured.ruchy",
+              "begin": "\\{",
+              "end": "\\}",
+              "patterns": [
+                {
+                  "name": "variable.parameter.lambda.ruchy",
+                  "match": "[a-z_][a-zA-Z0-9_]*"
+                }
+              ]
+            },
+            {
+              "include": "#types"
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        },
+        {
+          "name": "meta.closure.move.ruchy",
+          "match": "\\b(move)\\s*\\|",
+          "captures": {
+            "1": {
+              "name": "keyword.other.closure.ruchy"
+            }
+          }
+        }
+      ]
+    },
+    "patterns": {
+      "patterns": [
+        {
+          "name": "meta.match.ruchy",
+          "begin": "\\b(match)\\s+",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.match.ruchy"
+            }
+          },
+          "end": "(?<=\\})",
+          "patterns": [
+            {
+              "include": "#match-body"
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        },
+        {
+          "name": "meta.case.ruchy",
+          "begin": "\\b(case)\\s+",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.case.ruchy"
+            }
+          },
+          "end": "=>",
+          "endCaptures": {
+            "0": {
+              "name": "keyword.operator.match.ruchy"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#pattern-matching"
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        }
+      ]
+    },
+    "pattern-matching": {
+      "patterns": [
+        {
+          "name": "keyword.operator.wildcard.ruchy",
+          "match": "\\b_\\b"
+        },
+        {
+          "name": "keyword.operator.range.ruchy",
+          "match": "\\.\\."
+        },
+        {
+          "name": "meta.pattern.range.ruchy",
+          "match": "(\\w+)\\s*\\.\\.\\s*(\\w+)",
+          "captures": {
+            "1": {
+              "name": "constant.numeric.ruchy"
+            },
+            "2": {
+              "name": "constant.numeric.ruchy"
+            }
+          }
+        },
+        {
+          "name": "meta.pattern.variant.ruchy",
+          "match": "\\b([A-Z][a-zA-Z0-9_]*)\\s*(?:\\(|\\{)",
+          "captures": {
+            "1": {
+              "name": "entity.name.type.variant.ruchy"
+            }
+          }
+        },
+        {
+          "name": "meta.pattern.reference.ruchy",
+          "match": "(&(?:mut\\s+)?)\\s*([a-z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": {
+              "name": "keyword.operator.reference.ruchy"
+            },
+            "2": {
+              "name": "variable.other.pattern.ruchy"
+            }
+          }
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#numbers"
+        },
+        {
+          "name": "variable.other.pattern.ruchy",
+          "match": "[a-z_][a-zA-Z0-9_]*"
+        }
+      ]
+    },
+    "match-body": {
+      "patterns": [
+        {
+          "name": "meta.match.body.ruchy",
+          "begin": "\\{",
+          "end": "\\}",
+          "patterns": [
+            {
+              "name": "meta.match.arm.ruchy",
+              "begin": "(?=\\S)",
+              "end": "=>|(?=\\})",
+              "patterns": [
+                {
+                  "include": "#pattern-matching"
+                },
+                {
+                  "name": "meta.match.guard.ruchy",
+                  "begin": "\\b(if)\\s+",
+                  "beginCaptures": {
+                    "1": {
+                      "name": "keyword.control.conditional.ruchy"
+                    }
+                  },
+                  "end": "=>",
+                  "endCaptures": {
+                    "0": {
+                      "name": "keyword.operator.match.ruchy"
+                    }
+                  },
+                  "patterns": [
+                    {
+                      "include": "$self"
+                    }
+                  ]
+                },
+                {
+                  "include": "$self"
+                }
+              ]
+            },
+            {
+              "include": "$self"
+            }
+          ]
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "punctuation.separator.comma.ruchy",
+          "match": ","
+        },
+        {
+          "name": "punctuation.terminator.semicolon.ruchy",
+          "match": ";"
+        },
+        {
+          "name": "punctuation.definition.block.begin.ruchy",
+          "match": "\\{"
+        },
+        {
+          "name": "punctuation.definition.block.end.ruchy",
+          "match": "\\}"
+        },
+        {
+          "name": "punctuation.definition.group.begin.ruchy",
+          "match": "\\("
+        },
+        {
+          "name": "punctuation.definition.group.end.ruchy",
+          "match": "\\)"
+        },
+        {
+          "name": "punctuation.definition.array.begin.ruchy",
+          "match": "\\["
+        },
+        {
+          "name": "punctuation.definition.array.end.ruchy",
+          "match": "\\]"
+        },
+        {
+          "name": "punctuation.accessor.ruchy",
+          "match": "\\."
+        },
+        {
+          "name": "punctuation.definition.generic.begin.ruchy",
+          "match": "<"
+        },
+        {
+          "name": "punctuation.definition.generic.end.ruchy",
+          "match": ">"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,171 @@
+# PMAT Configuration for Ruchy Syntax Tools
+# Pragmatic MCP Agent Toolkit - Quality Gates and Task Management
+# Version: 1.0
+
+[project]
+name = "ruchy-syntax-tools"
+version = "0.1.0"
+description = "Syntax highlighting tools for the Ruchy programming language"
+repository = "https://github.com/pragmatic-ai/ruchy-syntax-tools"
+task_id_pattern = "RSYN-[0-9]{4}"
+
+[quality_gate]
+# Toyota Way compliance standards
+max_cyclomatic_complexity = 20
+max_cognitive_complexity = 15
+max_satd_comments = 0
+min_test_coverage = 80.0
+max_build_warnings = 0
+max_clippy_warnings = 0
+
+# Performance requirements
+max_highlight_latency_ms = 25
+max_memory_usage_mb = 5
+max_file_size_lines = 50000
+
+[task_categories]
+# Semantic task ID ranges for ruchy-syntax-tools
+FOUND = "Foundation & Infrastructure (0001-0099)"
+TMGR = "TextMate Grammar (0100-0199)"
+TSGR = "Tree-sitter Grammar (0200-0299)"
+WEBGR = "Web Grammars - highlight.js, Prism (0300-0399)"
+QUAL = "Quality & Testing (0400-0499)"
+UPSTR = "Upstream Integration (0500-0599)"
+
+[validation]
+# Required validation steps for task completion
+required_checks = [
+    "grammar_validation",
+    "test_fixtures_pass",
+    "performance_benchmarks",
+    "documentation_sync",
+    "build_success"
+]
+
+# File patterns that require documentation updates
+documentation_sync_patterns = [
+    "grammars/**/*.yaml",
+    "grammars/**/*.js",
+    "test/fixtures/*.rhy"
+]
+
+[complexity_analysis]
+# Files and patterns to analyze for complexity
+target_patterns = [
+    "grammars/**/*.yaml",
+    "grammars/**/*.json", 
+    "tools/**/*.js",
+    "test/**/*.js"
+]
+
+# Ignore patterns for complexity analysis
+ignore_patterns = [
+    "node_modules/**",
+    "build/**",
+    "dist/**",
+    "coverage/**"
+]
+
+[performance]
+# Performance targets and thresholds
+highlight_latency_target_ms = 25
+memory_usage_target_mb = 5
+grammar_size_limit_kb = 50
+
+# Benchmark configurations
+benchmark_files = [
+    "test/fixtures/minimal.rhy",
+    "test/fixtures/actors.rhy",
+    "test/fixtures/errors.rhy"
+]
+
+[testing]
+# Test coverage and validation requirements
+min_coverage_percent = 80.0
+required_test_types = [
+    "syntax_validation",
+    "performance_benchmarks", 
+    "visual_regression",
+    "cross_platform"
+]
+
+# Test fixture requirements
+required_fixtures = [
+    "minimal.rhy",
+    "actors.rhy", 
+    "errors.rhy",
+    "complex_example.rhy"
+]
+
+[documentation]
+# Documentation synchronization requirements
+required_updates = [
+    "docs/execution/roadmap.md",
+    "docs/execution/roadmap.yaml",
+    "CLAUDE.md",
+    "README.md"
+]
+
+# Auto-generated documentation
+auto_generate = [
+    "grammar_reference.md",
+    "performance_benchmarks.md"
+]
+
+[integration]
+# CI/CD and automation settings
+pre_commit_hooks = true
+auto_format_on_save = true
+quality_gate_on_pr = true
+
+# Build automation
+build_on_grammar_change = true
+test_on_fixture_change = true
+benchmark_on_performance_change = true
+
+[upstream]
+# Upstream integration tracking
+target_repositories = [
+    "github.com/github/linguist",
+    "marketplace.visualstudio.com",
+    "github.com/highlightjs/highlight.js",
+    "github.com/PrismJS/prism"
+]
+
+# Submission requirements
+submission_checklist = [
+    "grammar_compliance_100_percent",
+    "performance_targets_met",
+    "test_coverage_above_threshold",
+    "documentation_complete",
+    "community_examples_provided"
+]
+
+[sprint_management]
+# Sprint and velocity tracking
+default_sprint_length_days = 7
+story_points_per_complexity = { Low = 2, Medium = 5, High = 8 }
+velocity_tracking_enabled = true
+
+# Task status definitions
+task_status_icons = { PLANNED = "📋", IN_PROGRESS = "🚧", COMPLETED = "✅", BLOCKED = "🚫", DEFERRED = "⏸️" }
+
+[quality_reporting]
+# Automated quality reporting
+daily_complexity_report = true
+weekly_velocity_report = true
+sprint_completion_report = true
+
+# Report formats
+output_formats = ["json", "markdown", "html"]
+report_directory = "reports/"
+
+[ai_assistance]
+# AI-powered code analysis and suggestions
+enable_complexity_suggestions = true
+enable_performance_optimization = true
+enable_grammar_validation = true
+
+# AI model preferences
+preferred_models = ["claude-3-5-sonnet", "gpt-4"]
+fallback_models = ["claude-3-haiku"]

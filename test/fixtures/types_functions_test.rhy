@@ -1,0 +1,225 @@
+// Function and type definition test cases
+// Tests comprehensive parsing of all type system constructs
+
+/// Generic function with constraints
+fn process_items<T, U, E>(items: Vec<T>, processor: fn(T) -> Result<U, E>) -> Result<Vec<U>, E>
+where
+    T: Clone + Send,
+    U: Send + Sync + 'static,
+    E: std::error::Error
+{
+    let mut results = Vec::new()
+    for item in items {
+        match processor(item) {
+            Ok(processed) => results.push(processed),
+            Err(e) => return Err(e)
+        }
+    }
+    Ok(results)
+}
+
+/// Simple function with various parameter types
+fn example_function(
+    value: int,
+    reference: &str,
+    mutable_ref: &mut Vec<int>,
+    optional: Option<bool>,
+    callback: fn(int) -> str
+) -> Result<str> {
+    if let Some(flag) = optional {
+        if flag {
+            callback(value)
+        } else {
+            "disabled".to_string()
+        }
+    } else {
+        Err("missing option")
+    }
+}
+
+/// Method with self parameters
+impl User {
+    // Different self parameter variants
+    fn new(name: str, email: str) -> Self {
+        User { name, email, active: true }
+    }
+    
+    fn get_name(&self) -> &str {
+        &self.name
+    }
+    
+    fn set_active(&mut self, active: bool) {
+        self.active = active
+    }
+    
+    fn consume_user(self) -> str {
+        self.name
+    }
+}
+
+// Struct definitions with various field types
+struct Point<T> where T: Copy + Add {
+    pub x: T,
+    pub y: T,
+    metadata: HashMap<str, str>
+}
+
+/// Documentation for User struct
+struct User {
+    pub name: str,
+    pub email: str,
+    age: Option<int>,
+    active: bool,
+    pub(crate) internal_id: u64,
+    preferences: UserPreferences
+}
+
+// Tuple struct
+struct Color(u8, u8, u8, f32);
+
+// Unit struct
+struct Marker;
+
+// Enum definitions
+enum Message {
+    Quit,
+    Move { x: int, y: int },
+    Write(str),
+    ChangeColor(u8, u8, u8),
+    Complex {
+        id: u64,
+        data: Vec<u8>,
+        metadata: Option<HashMap<str, Value>>
+    }
+}
+
+/// Network response types
+enum ApiResponse<T, E> 
+where 
+    T: Serialize + DeserializeOwned,
+    E: Error + Send + Sync + 'static
+{
+    Success(T),
+    Error {
+        code: u16,
+        message: str,
+        details: Option<E>
+    },
+    Timeout,
+    NetworkError(NetworkErrorKind)
+}
+
+// Type aliases
+type UserId = u64;
+type UserMap = HashMap<UserId, User>;
+type ProcessorFn<T> = fn(T) -> Result<T>;
+type ComplexType<T, U> = Result<HashMap<T, Vec<U>>, ProcessingError>;
+
+// Trait definitions
+trait Drawable {
+    fn draw(&self, canvas: &Canvas) -> Result<()>;
+    
+    fn area(&self) -> f64 {
+        0.0  // Default implementation
+    }
+}
+
+/// Generic trait with associated types
+trait Iterator<T> {
+    type Item;
+    
+    fn next(&mut self) -> Option<Self::Item>;
+    
+    fn collect<C>(&mut self) -> C 
+    where 
+        C: FromIterator<Self::Item>
+    {
+        C::from_iter(self)
+    }
+}
+
+// Trait implementations
+impl<T> Drawable for Point<T> 
+where 
+    T: Copy + Add + Into<f64>
+{
+    fn draw(&self, canvas: &Canvas) -> Result<()> {
+        canvas.draw_point(self.x.into(), self.y.into())
+    }
+    
+    fn area(&self) -> f64 {
+        0.0  // Points have no area
+    }
+}
+
+impl Display for User {
+    fn fmt(&self, f: &mut Formatter) -> Result<()> {
+        write!(f, "User(name={}, email={})", self.name, self.email)
+    }
+}
+
+// Function calls and method calls
+fn test_function_calls() {
+    // Regular function calls
+    let result = process_data(input, config)
+    let value = calculate(1, 2, 3)
+    
+    // Associated function calls (constructors)
+    let user = User::new("Alice", "alice@example.com")
+    let point = Point::<f64>::origin()
+    let vector = Vec::<int>::with_capacity(100)
+    
+    // Method calls
+    let name = user.get_name()
+    user.set_active(true)
+    let length = vector.len()
+    
+    // Chained method calls
+    let processed = data
+        .iter()
+        .filter(|item| item.is_valid())
+        .map(|item| item.process())
+        .collect::<Vec<_>>()
+    
+    // Macro invocations
+    println!("Debug: {:?}", value)
+    vec![1, 2, 3, 4, 5]
+    format!("Hello, {}", name)
+    debug_assert!(condition, "assertion message")
+}
+
+// Complex generic constraints
+fn advanced_generic_function<'a, T, U, F, R>(
+    data: &'a [T],
+    processor: F,
+    config: ProcessingConfig
+) -> impl Iterator<Item = R> + 'a
+where
+    T: Clone + Send + Sync + 'a,
+    U: Into<R> + Send,
+    F: Fn(&T) -> U + Send + Sync + 'a,
+    R: Send + 'a
+{
+    data.iter()
+        .filter(|item| config.should_process(item))
+        .map(move |item| processor(item).into())
+}
+
+// Destructured parameters
+fn handle_request({ method, path, headers }: HttpRequest) -> HttpResponse {
+    match (method.as_str(), path.as_str()) {
+        ("GET", "/health") => HttpResponse::ok("healthy"),
+        ("POST", "/api/users") => create_user(headers),
+        _ => HttpResponse::not_found()
+    }
+}
+
+// Higher-order functions
+fn create_processor(config: Config) -> impl Fn(Data) -> Result<ProcessedData> {
+    move |data: Data| -> Result<ProcessedData> {
+        if config.validate {
+            data.validate()?
+        }
+        data.process(&config)
+    }
+}

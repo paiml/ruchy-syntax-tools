@@ -1,0 +1,209 @@
+{
+  "name": "ruchy-lang",
+  "displayName": "Ruchy Language Support",
+  "description": "Syntax highlighting and language support for the Ruchy programming language",
+  "version": "1.0.0",
+  "publisher": "ruchy-lang",
+  "license": "MIT",
+  "author": {
+    "name": "Ruchy Language Team"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ruchy-lang/ruchy-syntax-tools"
+  },
+  "bugs": {
+    "url": "https://github.com/ruchy-lang/ruchy-syntax-tools/issues"
+  },
+  "homepage": "https://github.com/ruchy-lang/ruchy-syntax-tools#readme",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Formatters"
+  ],
+  "keywords": [
+    "ruchy",
+    "rhy",
+    "actor",
+    "pipeline",
+    "systems programming",
+    "syntax highlighting"
+  ],
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onLanguage:ruchy"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "ruchy",
+        "aliases": [
+          "Ruchy",
+          "ruchy"
+        ],
+        "extensions": [
+          ".rhy",
+          ".ruchy"
+        ],
+        "firstLine": "^#!/.*\\bruchy\\b",
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/ruchy-light.svg",
+          "dark": "./icons/ruchy-dark.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "ruchy",
+        "scopeName": "source.ruchy",
+        "path": "./syntaxes/ruchy.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.markdown": "markdown",
+          "meta.embedded.block.sql": "sql",
+          "meta.embedded.block.json": "json"
+        }
+      }
+    ],
+    "snippets": [
+      {
+        "language": "ruchy",
+        "path": "./snippets/ruchy.json"
+      }
+    ],
+    "configurationDefaults": {
+      "[ruchy]": {
+        "editor.semanticHighlighting.enabled": true,
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true,
+        "editor.rulers": [100],
+        "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true
+      }
+    },
+    "commands": [
+      {
+        "command": "ruchy.runFile",
+        "title": "Ruchy: Run Current File",
+        "icon": "$(play)"
+      },
+      {
+        "command": "ruchy.runTests",
+        "title": "Ruchy: Run Tests",
+        "icon": "$(testing-run-icon)"
+      },
+      {
+        "command": "ruchy.formatDocument",
+        "title": "Ruchy: Format Document",
+        "icon": "$(code)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "when": "resourceExtname == .rhy || resourceExtname == .ruchy",
+          "command": "ruchy.runFile",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "when": "resourceExtname == .rhy || resourceExtname == .ruchy",
+          "command": "ruchy.runFile",
+          "group": "ruchy"
+        },
+        {
+          "when": "resourceExtname == .rhy || resourceExtname == .ruchy",
+          "command": "ruchy.formatDocument",
+          "group": "ruchy"
+        }
+      ]
+    },
+    "problemMatchers": [
+      {
+        "name": "ruchy",
+        "owner": "ruchy",
+        "fileLocation": [
+          "relative",
+          "${workspaceFolder}"
+        ],
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      }
+    ],
+    "taskDefinitions": [
+      {
+        "type": "ruchy",
+        "required": [
+          "task"
+        ],
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "The Ruchy task to execute"
+          }
+        }
+      }
+    ],
+    "colors": [
+      {
+        "id": "ruchy.actor.send",
+        "description": "Color for actor send operator",
+        "defaults": {
+          "dark": "#4EC9B0",
+          "light": "#008080",
+          "highContrast": "#4EC9B0"
+        }
+      },
+      {
+        "id": "ruchy.pipeline",
+        "description": "Color for pipeline operator",
+        "defaults": {
+          "dark": "#C586C0",
+          "light": "#800080",
+          "highContrast": "#C586C0"
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile && npm run test",
+    "compile": "node ./build.js",
+    "watch": "node ./build.js --watch",
+    "test": "node ./test/runTest.js",
+    "lint": "eslint . --max-warnings 0",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@vscode/test-electron": "^2.3.0",
+    "@vscode/vsce": "^2.19.0",
+    "eslint": "^8.42.0"
+  },
+  "dependencies": {},
+  "__metadata": {
+    "id": "ruchy-lang",
+    "publisherDisplayName": "Ruchy Language Team",
+    "publisherId": "ruchy-lang",
+    "isPreReleaseVersion": false,
+    "installedTimestamp": 0
+  }
+}
