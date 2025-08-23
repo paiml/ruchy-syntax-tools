@@ -8,12 +8,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/noahgift/ruchy-syntax-tools.git"
+    "url": "https://github.com/paiml/ruchy-syntax-tools.git"
   },
   "bugs": {
-    "url": "https://github.com/noahgift/ruchy-syntax-tools/issues"
+    "url": "https://github.com/paiml/ruchy-syntax-tools/issues"
   },
-  "homepage": "https://github.com/noahgift/ruchy-syntax-tools#readme",
+  "homepage": "https://github.com/paiml/ruchy-syntax-tools#readme",
   "engines": {
     "vscode": "^1.74.0"
   },

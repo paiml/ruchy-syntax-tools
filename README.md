@@ -56,8 +56,8 @@ const lsp = require('ruchy-syntax-tools/lsp');
 
 ## 🔗 Links
 
-- **Repository**: https://github.com/noahgift/ruchy-syntax-tools
-- **Issues**: https://github.com/noahgift/ruchy-syntax-tools/issues
+- **Repository**: https://github.com/paiml/ruchy-syntax-tools
+- **Issues**: https://github.com/paiml/ruchy-syntax-tools/issues
 - **NPM Package**: https://www.npmjs.com/package/ruchy-syntax-tools
 
 ## 📄 License

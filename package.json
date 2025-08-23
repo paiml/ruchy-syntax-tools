@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/noahgift/ruchy-syntax-tools.git"
+    "url": "git+https://github.com/paiml/ruchy-syntax-tools.git"
   },
   "keywords": [
     "ruchy",
@@ -40,9 +40,9 @@
   "license": "MIT",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/noahgift/ruchy-syntax-tools/issues"
+    "url": "https://github.com/paiml/ruchy-syntax-tools/issues"
   },
-  "homepage": "https://github.com/noahgift/ruchy-syntax-tools#readme",
+  "homepage": "https://github.com/paiml/ruchy-syntax-tools#readme",
   "files": [
     "grammars/",
     "lsp/",
