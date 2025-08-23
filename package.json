@@ -1,6 +1,6 @@
 {
   "name": "ruchy-syntax-tools",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Comprehensive syntax highlighting and language support for the Ruchy programming language",
   "main": "index.js",
   "directories": {
