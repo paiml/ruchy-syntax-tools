@@ -1,0 +1,177 @@
+{
+  "name": "ruchy",
+  "displayName": "Ruchy Language Support",
+  "description": "Comprehensive language support for the Ruchy programming language",
+  "version": "1.2.1",
+  "publisher": "noahgift",
+  "author": "Ruchy Language Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/noahgift/ruchy-syntax-tools.git"
+  },
+  "bugs": {
+    "url": "https://github.com/noahgift/ruchy-syntax-tools/issues"
+  },
+  "homepage": "https://github.com/noahgift/ruchy-syntax-tools#readme",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Syntax Highlighting",
+    "Linters",
+    "Formatters"
+  ],
+  "keywords": [
+    "ruchy",
+    "rust-like",
+    "actor-model",
+    "pipeline-operator",
+    "systems-programming"
+  ],
+  "icon": "images/ruchy-icon.png",
+  "galleryBanner": {
+    "color": "#CE422B",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onLanguage:ruchy"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "ruchy",
+        "aliases": [
+          "Ruchy",
+          "ruchy"
+        ],
+        "extensions": [
+          ".rhy",
+          ".ruchy"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./images/ruchy-file-light.svg",
+          "dark": "./images/ruchy-file-dark.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "ruchy",
+        "scopeName": "source.ruchy",
+        "path": "./syntaxes/ruchy.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Ruchy",
+      "properties": {
+        "ruchy.lsp.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Ruchy Language Server Protocol support"
+        },
+        "ruchy.lsp.serverPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to Ruchy LSP server binary (leave empty for auto-detection)"
+        },
+        "ruchy.formatting.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic code formatting"
+        },
+        "ruchy.diagnostics.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable diagnostic messages and error checking"
+        },
+        "ruchy.completion.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable IntelliSense and auto-completion"
+        },
+        "ruchy.highlighting.semanticTokens": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable semantic syntax highlighting"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "ruchy.restartLanguageServer",
+        "title": "Restart Language Server",
+        "category": "Ruchy"
+      },
+      {
+        "command": "ruchy.showOutputChannel",
+        "title": "Show Output Channel",
+        "category": "Ruchy"
+      },
+      {
+        "command": "ruchy.checkSyntax",
+        "title": "Check Syntax",
+        "category": "Ruchy"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "resourceExtname == .rhy || resourceExtname == .ruchy",
+          "command": "ruchy.checkSyntax",
+          "group": "1_modification"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "ruchy.restartLanguageServer",
+          "when": "editorLangId == ruchy"
+        },
+        {
+          "command": "ruchy.showOutputChannel",
+          "when": "editorLangId == ruchy"
+        },
+        {
+          "command": "ruchy.checkSyntax",
+          "when": "editorLangId == ruchy"
+        }
+      ]
+    },
+    "snippets": [
+      {
+        "language": "ruchy",
+        "path": "./snippets/ruchy.json"
+      }
+    ],
+    "themes": [
+      {
+        "label": "Ruchy Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/ruchy-dark.json"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "vscode:prepublish": "npm run compile",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.74.0",
+    "@vscode/test-electron": "^2.3.0",
+    "typescript": "^4.9.0",
+    "@vscode/vsce": "^2.19.0"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^8.1.0"
+  }
+}

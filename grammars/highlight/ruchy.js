@@ -1,18 +1,18 @@
 /**
  * highlight.js Language Module for Ruchy
  * RSYN-0301: Web-based syntax highlighting
- * 
+ *
  * @fileoverview Ruchy language support for highlight.js
  * @version 1.0.0
  * @license MIT
- * 
+ *
  * Quality Requirements:
  * - Test Coverage: ≥80%
  * - Cyclomatic Complexity: ≤20
  * - Performance: <25ms for 50K lines
  */
 
-(function (hljs) {
+(function(hljs) {
   'use strict';
 
   /**
@@ -56,7 +56,7 @@
     };
 
     const ACTOR_OPERATORS = {
-      className: 'operator', 
+      className: 'operator',
       begin: /<-|<\?/, // Actor send and ask operators
       relevance: 10
     };

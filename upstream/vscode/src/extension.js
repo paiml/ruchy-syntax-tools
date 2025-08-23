@@ -1,7 +1,7 @@
 /**
  * VS Code Extension for Ruchy Language Support
  * RSYN-0501: VS Code extension implementation
- * 
+ *
  * Quality Requirements:
  * - Test Coverage: ≥80%
  * - Cyclomatic Complexity: ≤20
@@ -53,7 +53,7 @@ function activate(context) {
 
   // Watch for file changes
   const watcher = vscode.workspace.createFileSystemWatcher('**/*.{rhy,ruchy}');
-  
+
   watcher.onDidChange(uri => updateDiagnostics(uri, diagnosticCollection));
   watcher.onDidCreate(uri => updateDiagnostics(uri, diagnosticCollection));
   watcher.onDidDelete(uri => diagnosticCollection.delete(uri));
@@ -133,12 +133,12 @@ async function formatDocument() {
 
   // Save document first
   await document.save();
-  
+
   // Run formatter
   const terminal = vscode.window.createTerminal('Ruchy Format');
   terminal.sendText(`ruchy fmt ${document.fileName}`);
   terminal.dispose();
-  
+
   // Reload document
   setTimeout(() => {
     vscode.commands.executeCommand('workbench.action.files.revert');
@@ -204,7 +204,7 @@ function provideCompletions(document, position) {
     { label: '<-', detail: 'Actor send operator', insertText: ' <- ' },
     { label: '<?', detail: 'Actor ask operator', insertText: ' <? ' }
   ];
-  
+
   operators.forEach(op => {
     const item = new vscode.CompletionItem(op.label, vscode.CompletionItemKind.Operator);
     item.detail = op.detail;
@@ -272,14 +272,14 @@ async function updateDiagnostics(uri, diagnosticCollection) {
   }
 
   const diagnostics = [];
-  
+
   try {
     const content = await fs.readFile(uri.fsPath, 'utf8');
     const lines = content.split('\n');
 
     lines.forEach((line, index) => {
       // Check for common issues
-      
+
       // Missing semicolons (simplified check)
       if (line.trim() && !line.trim().endsWith(';') && !line.trim().endsWith('{') && !line.trim().endsWith('}') && !line.includes('//')) {
         const lastChar = line.length - 1;

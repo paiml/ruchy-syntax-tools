@@ -1,0 +1,273 @@
+{
+    "Function Definition": {
+        "prefix": "fn",
+        "body": [
+            "fn ${1:name}(${2:params}) -> ${3:ReturnType} {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Create a function definition"
+    },
+    "Actor Definition": {
+        "prefix": "actor",
+        "body": [
+            "actor ${1:ActorName} {",
+            "\tstate: ${2:StateType},",
+            "",
+            "\tfn new(${3:init_params}) -> Self {",
+            "\t\tSelf { state: ${4:initial_state} }",
+            "\t}",
+            "",
+            "\tfn handle(&mut self, message: ${5:MessageType}) -> ${6:ResponseType} {",
+            "\t\t$0",
+            "\t}",
+            "}"
+        ],
+        "description": "Create an actor definition with basic structure"
+    },
+    "Struct Definition": {
+        "prefix": "struct",
+        "body": [
+            "struct ${1:Name} {",
+            "\t${2:field}: ${3:Type},",
+            "}"
+        ],
+        "description": "Create a struct definition"
+    },
+    "Enum Definition": {
+        "prefix": "enum",
+        "body": [
+            "enum ${1:Name} {",
+            "\t${2:Variant1},",
+            "\t${3:Variant2}(${4:Type}),",
+            "}"
+        ],
+        "description": "Create an enum definition"
+    },
+    "Match Expression": {
+        "prefix": "match",
+        "body": [
+            "match ${1:expression} {",
+            "\t${2:pattern} => ${3:result},",
+            "\t_ => ${4:default},",
+            "}"
+        ],
+        "description": "Create a match expression"
+    },
+    "If Expression": {
+        "prefix": "if",
+        "body": [
+            "if ${1:condition} {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Create an if expression"
+    },
+    "If-Else Expression": {
+        "prefix": "ifelse",
+        "body": [
+            "if ${1:condition} {",
+            "\t${2:if_body}",
+            "} else {",
+            "\t${3:else_body}",
+            "}"
+        ],
+        "description": "Create an if-else expression"
+    },
+    "For Loop": {
+        "prefix": "for",
+        "body": [
+            "for ${1:item} in ${2:iterator} {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Create a for loop"
+    },
+    "While Loop": {
+        "prefix": "while",
+        "body": [
+            "while ${1:condition} {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Create a while loop"
+    },
+    "Loop": {
+        "prefix": "loop",
+        "body": [
+            "loop {",
+            "\t$0",
+            "\tbreak;",
+            "}"
+        ],
+        "description": "Create an infinite loop"
+    },
+    "Let Binding": {
+        "prefix": "let",
+        "body": [
+            "let ${1:name} = ${2:value};"
+        ],
+        "description": "Create a let binding"
+    },
+    "Mutable Let Binding": {
+        "prefix": "letmut",
+        "body": [
+            "let mut ${1:name} = ${2:value};"
+        ],
+        "description": "Create a mutable let binding"
+    },
+    "Spawn Actor": {
+        "prefix": "spawn",
+        "body": [
+            "let ${1:actor} = spawn(${2:ActorType}::new(${3:params}));"
+        ],
+        "description": "Spawn a new actor instance"
+    },
+    "Send Message": {
+        "prefix": "send",
+        "body": [
+            "${1:actor} <- ${2:message};"
+        ],
+        "description": "Send a message to an actor"
+    },
+    "Ask Message": {
+        "prefix": "ask",
+        "body": [
+            "let ${1:response} = ${2:actor} <? ${3:message};"
+        ],
+        "description": "Send a message and wait for response"
+    },
+    "Pipeline": {
+        "prefix": "pipe",
+        "body": [
+            "${1:value} >> ${2:function} >> ${3:function2}"
+        ],
+        "description": "Create a pipeline expression"
+    },
+    "Result Match": {
+        "prefix": "result",
+        "body": [
+            "match ${1:result} {",
+            "\tOk(${2:value}) => ${3:success},",
+            "\tErr(${4:error}) => ${5:error_handling},",
+            "}"
+        ],
+        "description": "Match on a Result type"
+    },
+    "Option Match": {
+        "prefix": "option",
+        "body": [
+            "match ${1:option} {",
+            "\tSome(${2:value}) => ${3:some_case},",
+            "\tNone => ${4:none_case},",
+            "}"
+        ],
+        "description": "Match on an Option type"
+    },
+    "Impl Block": {
+        "prefix": "impl",
+        "body": [
+            "impl ${1:Type} {",
+            "\tfn ${2:method_name}(&self${3:, params}) -> ${4:ReturnType} {",
+            "\t\t$0",
+            "\t}",
+            "}"
+        ],
+        "description": "Create an impl block"
+    },
+    "Trait Definition": {
+        "prefix": "trait",
+        "body": [
+            "trait ${1:TraitName} {",
+            "\tfn ${2:method_name}(&self${3:, params}) -> ${4:ReturnType};",
+            "}"
+        ],
+        "description": "Create a trait definition"
+    },
+    "Trait Impl": {
+        "prefix": "implfor",
+        "body": [
+            "impl ${1:Trait} for ${2:Type} {",
+            "\tfn ${3:method_name}(&self${4:, params}) -> ${5:ReturnType} {",
+            "\t\t$0",
+            "\t}",
+            "}"
+        ],
+        "description": "Implement a trait for a type"
+    },
+    "Test Function": {
+        "prefix": "test",
+        "body": [
+            "#[cfg(test)]",
+            "mod tests {",
+            "\tuse super::*;",
+            "",
+            "\t#[test]",
+            "\tfn ${1:test_name}() {",
+            "\t\t$0",
+            "\t\tassert_eq!(${2:expected}, ${3:actual});",
+            "\t}",
+            "}"
+        ],
+        "description": "Create a test function"
+    },
+    "Module Declaration": {
+        "prefix": "mod",
+        "body": [
+            "mod ${1:module_name} {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Create a module declaration"
+    },
+    "Use Statement": {
+        "prefix": "use",
+        "body": [
+            "use ${1:path};"
+        ],
+        "description": "Create a use statement"
+    },
+    "Const Declaration": {
+        "prefix": "const",
+        "body": [
+            "const ${1:NAME}: ${2:Type} = ${3:value};"
+        ],
+        "description": "Create a const declaration"
+    },
+    "Static Declaration": {
+        "prefix": "static",
+        "body": [
+            "static ${1:NAME}: ${2:Type} = ${3:value};"
+        ],
+        "description": "Create a static declaration"
+    },
+    "Doc Comment": {
+        "prefix": "doc",
+        "body": [
+            "/// ${1:Brief description}",
+            "///",
+            "/// ${2:Detailed description}",
+            "///",
+            "/// # Examples",
+            "///",
+            "/// ```",
+            "/// ${3:example_code}",
+            "/// ```"
+        ],
+        "description": "Create a documentation comment"
+    },
+    "Attribute": {
+        "prefix": "attr",
+        "body": [
+            "#[${1:attribute}]"
+        ],
+        "description": "Create an attribute"
+    },
+    "Derive": {
+        "prefix": "derive",
+        "body": [
+            "#[derive(${1:Debug, Clone, PartialEq})]"
+        ],
+        "description": "Create a derive attribute"
+    }
+}

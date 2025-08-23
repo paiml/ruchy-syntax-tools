@@ -1,0 +1,48 @@
+# VS Code ignore file to reduce extension size
+
+# Source files
+src/
+tsconfig.json
+.vscode/
+.vscode-test/
+
+# Build artifacts
+out/test/
+*.map
+
+# Dependencies we don't need in the packaged extension
+node_modules/@types/
+node_modules/@azure/
+node_modules/@babel/
+node_modules/@eslint/
+node_modules/@humanwhocodes/
+node_modules/@jest/
+node_modules/typescript/
+node_modules/eslint/
+
+# Development files
+*.vsix
+npm-debug.log
+*.log
+
+# Documentation that's not needed in extension
+CONTRIBUTING.md
+.gitignore
+
+# Test files
+test/
+**/*.test.js
+**/*.test.ts
+
+# Package lock files
+package-lock.json
+
+# Unnecessary directories
+coverage/
+.nyc_output/
+docs/
+examples/
+
+# OS files
+.DS_Store
+Thumbs.db

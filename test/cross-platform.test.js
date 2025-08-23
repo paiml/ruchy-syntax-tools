@@ -3,7 +3,7 @@
 /**
  * Cross-Platform Grammar Test Suite
  * RSYN-0401: Comprehensive testing across all grammar implementations
- * 
+ *
  * Quality Requirements:
  * - Test Coverage: ≥80%
  * - All grammars must pass identical test cases
@@ -17,10 +17,10 @@ const assert = require('assert');
 
 // Quality enforcement thresholds
 const QUALITY_THRESHOLDS = {
-  minCoverage: 80,        // Minimum 80% test coverage
-  maxComplexity: 20,      // Maximum cyclomatic complexity
-  maxLatency: 25,         // Maximum 25ms for highlighting
-  minPassRate: 100        // All tests must pass
+  minCoverage: 80, // Minimum 80% test coverage
+  maxComplexity: 20, // Maximum cyclomatic complexity
+  maxLatency: 25, // Maximum 25ms for highlighting
+  minPassRate: 100 // All tests must pass
 };
 
 class CrossPlatformTestSuite {
@@ -52,25 +52,25 @@ class CrossPlatformTestSuite {
     try {
       // Load test fixtures
       const fixtures = await this.loadFixtures();
-      
+
       // Test each grammar implementation
       await this.testTextMateGrammar(fixtures);
       await this.testTreeSitterGrammar(fixtures);
       await this.testHighlightJsGrammar(fixtures);
       await this.testPrismGrammar(fixtures);
-      
+
       // Run performance benchmarks
       await this.runPerformanceBenchmarks(fixtures);
-      
+
       // Calculate coverage
       await this.calculateCoverage();
-      
+
       // Validate quality gates
       this.validateQualityGates();
-      
+
       // Report results
       this.reportResults();
-      
+
     } catch (error) {
       console.error('❌ Test suite failed:', error.message);
       process.exit(1);
@@ -124,33 +124,33 @@ class CrossPlatformTestSuite {
   async testTextMateGrammar(fixtures) {
     console.log('📝 Testing TextMate Grammar...');
     const grammarPath = path.join(__dirname, '..', 'grammars', 'textmate', 'ruchy.tmLanguage.json');
-    
+
     try {
       const grammar = JSON.parse(await fs.readFile(grammarPath, 'utf8'));
-      
+
       for (const fixture of fixtures) {
         const startTime = performance.now();
         const tokens = this.tokenizeWithTextMate(fixture.content, grammar);
         const endTime = performance.now();
-        
+
         // Validate tokens match expected
         const isValid = this.validateTokens(tokens, fixture.expectedTokens);
-        
+
         if (isValid) {
           this.results.textmate.passed++;
         } else {
           this.results.textmate.failed++;
           this.results.textmate.errors.push(`Failed: ${fixture.name}`);
         }
-        
+
         // Check performance
         const latency = endTime - startTime;
-        assert(latency < QUALITY_THRESHOLDS.maxLatency, 
+        assert(latency < QUALITY_THRESHOLDS.maxLatency,
           `TextMate latency ${latency.toFixed(2)}ms exceeds ${QUALITY_THRESHOLDS.maxLatency}ms`);
       }
-      
+
       console.log(`  ✅ TextMate: ${this.results.textmate.passed} passed, ${this.results.textmate.failed} failed`);
-      
+
     } catch (error) {
       console.error(`  ❌ TextMate Error: ${error.message}`);
       this.results.textmate.errors.push(error.message);
@@ -161,7 +161,7 @@ class CrossPlatformTestSuite {
     // Simulate TextMate tokenization
     const tokens = [];
     const lines = content.split('\n');
-    
+
     for (const line of lines) {
       // Apply patterns from grammar
       if (grammar.patterns) {
@@ -180,38 +180,38 @@ class CrossPlatformTestSuite {
         }
       }
     }
-    
+
     return tokens;
   }
 
   async testTreeSitterGrammar(fixtures) {
     console.log('🌲 Testing Tree-sitter Grammar...');
-    
+
     try {
       // Note: Tree-sitter requires native bindings, so we simulate here
       for (const fixture of fixtures) {
         const startTime = performance.now();
         const ast = this.parseWithTreeSitter(fixture.content);
         const endTime = performance.now();
-        
+
         // Validate AST structure
         const isValid = this.validateAST(ast, fixture.expectedTokens);
-        
+
         if (isValid) {
           this.results.treesitter.passed++;
         } else {
           this.results.treesitter.failed++;
           this.results.treesitter.errors.push(`Failed: ${fixture.name}`);
         }
-        
+
         // Check performance
         const latency = endTime - startTime;
         assert(latency < QUALITY_THRESHOLDS.maxLatency,
           `Tree-sitter latency ${latency.toFixed(2)}ms exceeds ${QUALITY_THRESHOLDS.maxLatency}ms`);
       }
-      
+
       console.log(`  ✅ Tree-sitter: ${this.results.treesitter.passed} passed, ${this.results.treesitter.failed} failed`);
-      
+
     } catch (error) {
       console.error(`  ❌ Tree-sitter Error: ${error.message}`);
       this.results.treesitter.errors.push(error.message);
@@ -236,34 +236,34 @@ class CrossPlatformTestSuite {
 
   async testHighlightJsGrammar(fixtures) {
     console.log('💡 Testing highlight.js Grammar...');
-    
+
     try {
       // Load highlight.js grammar
       const hljs = await this.loadHighlightJs();
-      
+
       for (const fixture of fixtures) {
         const startTime = performance.now();
         const result = hljs.highlight(fixture.content, { language: 'ruchy' });
         const endTime = performance.now();
-        
+
         // Validate highlighting result
         const isValid = result && result.value && result.value.includes('class=');
-        
+
         if (isValid) {
           this.results.highlight.passed++;
         } else {
           this.results.highlight.failed++;
           this.results.highlight.errors.push(`Failed: ${fixture.name}`);
         }
-        
+
         // Check performance
         const latency = endTime - startTime;
         assert(latency < QUALITY_THRESHOLDS.maxLatency,
           `highlight.js latency ${latency.toFixed(2)}ms exceeds ${QUALITY_THRESHOLDS.maxLatency}ms`);
       }
-      
+
       console.log(`  ✅ highlight.js: ${this.results.highlight.passed} passed, ${this.results.highlight.failed} failed`);
-      
+
     } catch (error) {
       console.error(`  ❌ highlight.js Error: ${error.message}`);
       this.results.highlight.errors.push(error.message);
@@ -274,7 +274,7 @@ class CrossPlatformTestSuite {
     // Simulate loading highlight.js (would use actual library in production)
     return {
       highlight: (code, options) => ({
-        value: `<span class="keyword">fn</span> <span class="function">main</span>()`,
+        value: '<span class="keyword">fn</span> <span class="function">main</span>()',
         language: options.language
       })
     };
@@ -282,34 +282,34 @@ class CrossPlatformTestSuite {
 
   async testPrismGrammar(fixtures) {
     console.log('🔍 Testing Prism.js Grammar...');
-    
+
     try {
       // Load Prism grammar
       const Prism = await this.loadPrism();
-      
+
       for (const fixture of fixtures) {
         const startTime = performance.now();
         const tokens = Prism.tokenize(fixture.content, Prism.languages.ruchy);
         const endTime = performance.now();
-        
+
         // Validate tokens
         const isValid = tokens && tokens.length > 0;
-        
+
         if (isValid) {
           this.results.prism.passed++;
         } else {
           this.results.prism.failed++;
           this.results.prism.errors.push(`Failed: ${fixture.name}`);
         }
-        
+
         // Check performance
         const latency = endTime - startTime;
         assert(latency < QUALITY_THRESHOLDS.maxLatency,
           `Prism latency ${latency.toFixed(2)}ms exceeds ${QUALITY_THRESHOLDS.maxLatency}ms`);
       }
-      
+
       console.log(`  ✅ Prism.js: ${this.results.prism.passed} passed, ${this.results.prism.failed} failed`);
-      
+
     } catch (error) {
       console.error(`  ❌ Prism.js Error: ${error.message}`);
       this.results.prism.errors.push(error.message);
@@ -340,13 +340,13 @@ class CrossPlatformTestSuite {
   async runPerformanceBenchmarks(fixtures) {
     console.log('\n⚡ Performance Benchmarks:');
     console.log('=' .repeat(60));
-    
+
     const sizes = [100, 1000, 10000];
-    
+
     for (const size of sizes) {
       const testCode = this.generateTestCode(size);
       console.log(`\nTesting ${size} lines:`);
-      
+
       // Benchmark each grammar
       const results = {
         textmate: await this.benchmarkGrammar('TextMate', testCode, 'textmate'),
@@ -354,7 +354,7 @@ class CrossPlatformTestSuite {
         highlight: await this.benchmarkGrammar('highlight.js', testCode, 'highlight'),
         prism: await this.benchmarkGrammar('Prism.js', testCode, 'prism')
       };
-      
+
       // Compare results
       const fastest = Math.min(...Object.values(results));
       for (const [name, time] of Object.entries(results)) {
@@ -378,8 +378,8 @@ class CrossPlatformTestSuite {
       '    Ok(())',
       '}'
     ];
-    
-    let code = [];
+
+    const code = [];
     for (let i = 0; i < lines; i++) {
       code.push(patterns[i % patterns.length]);
     }
@@ -389,10 +389,10 @@ class CrossPlatformTestSuite {
   async benchmarkGrammar(name, code, type) {
     const runs = 10;
     let totalTime = 0;
-    
+
     for (let i = 0; i < runs; i++) {
       const startTime = performance.now();
-      
+
       // Simulate processing based on type
       switch (type) {
         case 'textmate':
@@ -412,18 +412,18 @@ class CrossPlatformTestSuite {
           code.split(/\s+/);
           break;
       }
-      
+
       const endTime = performance.now();
       totalTime += endTime - startTime;
     }
-    
+
     return totalTime / runs;
   }
 
   async calculateCoverage() {
     console.log('\n📊 Coverage Report:');
     console.log('=' .repeat(60));
-    
+
     // Simulate coverage calculation (would use actual coverage tool in production)
     this.coverage = {
       statements: 85.3,
@@ -431,29 +431,29 @@ class CrossPlatformTestSuite {
       functions: 88.1,
       lines: 84.9
     };
-    
+
     for (const [metric, value] of Object.entries(this.coverage)) {
       const status = value >= QUALITY_THRESHOLDS.minCoverage ? '✅' : '❌';
       console.log(`  ${status} ${metric}: ${value.toFixed(1)}%`);
     }
-    
+
     const avgCoverage = Object.values(this.coverage).reduce((a, b) => a + b, 0) / 4;
     console.log(`\n  Average Coverage: ${avgCoverage.toFixed(1)}%`);
-    
+
     return avgCoverage;
   }
 
   validateQualityGates() {
     console.log('\n🎯 Quality Gate Validation:');
     console.log('=' .repeat(60));
-    
+
     let allPassed = true;
-    
+
     // Check test pass rate
     for (const [platform, result] of Object.entries(this.results)) {
       const total = result.passed + result.failed;
       const passRate = total > 0 ? (result.passed / total * 100) : 0;
-      
+
       if (passRate < QUALITY_THRESHOLDS.minPassRate) {
         console.log(`  ❌ ${platform}: ${passRate.toFixed(1)}% pass rate (required: ${QUALITY_THRESHOLDS.minPassRate}%)`);
         allPassed = false;
@@ -461,7 +461,7 @@ class CrossPlatformTestSuite {
         console.log(`  ✅ ${platform}: ${passRate.toFixed(1)}% pass rate`);
       }
     }
-    
+
     // Check coverage
     const avgCoverage = Object.values(this.coverage).reduce((a, b) => a + b, 0) / 4;
     if (avgCoverage < QUALITY_THRESHOLDS.minCoverage) {
@@ -470,41 +470,41 @@ class CrossPlatformTestSuite {
     } else {
       console.log(`  ✅ Coverage: ${avgCoverage.toFixed(1)}%`);
     }
-    
+
     if (!allPassed) {
       throw new Error('Quality gates not met! Cannot proceed.');
     }
-    
+
     console.log('\n✅ All quality gates passed!');
   }
 
   reportResults() {
     console.log('\n📋 Final Report:');
     console.log('=' .repeat(60));
-    
+
     let totalPassed = 0;
     let totalFailed = 0;
-    
+
     for (const [platform, result] of Object.entries(this.results)) {
       totalPassed += result.passed;
       totalFailed += result.failed;
-      
+
       console.log(`\n${platform}:`);
       console.log(`  Passed: ${result.passed}`);
       console.log(`  Failed: ${result.failed}`);
-      
+
       if (result.errors.length > 0) {
         console.log('  Errors:');
         result.errors.forEach(error => console.log(`    - ${error}`));
       }
     }
-    
+
     console.log('\n' + '=' .repeat(60));
     console.log(`Total Tests: ${totalPassed + totalFailed}`);
     console.log(`Passed: ${totalPassed}`);
     console.log(`Failed: ${totalFailed}`);
     console.log(`Pass Rate: ${((totalPassed / (totalPassed + totalFailed)) * 100).toFixed(1)}%`);
-    
+
     if (totalFailed > 0) {
       console.log('\n❌ TESTS FAILED - Quality requirements not met!');
       process.exit(1);

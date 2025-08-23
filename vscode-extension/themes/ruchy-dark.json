@@ -1,0 +1,172 @@
+{
+    "name": "Ruchy Dark",
+    "type": "dark",
+    "colors": {
+        "editor.background": "#1e1e1e",
+        "editor.foreground": "#d4d4d4",
+        "activityBar.background": "#2d2d30",
+        "sideBar.background": "#252526",
+        "statusBar.background": "#007acc"
+    },
+    "tokenColors": [
+        {
+            "name": "Comment",
+            "scope": [
+                "comment",
+                "punctuation.definition.comment"
+            ],
+            "settings": {
+                "fontStyle": "italic",
+                "foreground": "#6A9955"
+            }
+        },
+        {
+            "name": "Doc Comment",
+            "scope": [
+                "comment.documentation",
+                "comment.doc"
+            ],
+            "settings": {
+                "fontStyle": "italic",
+                "foreground": "#7BA05B"
+            }
+        },
+        {
+            "name": "Keywords",
+            "scope": [
+                "keyword"
+            ],
+            "settings": {
+                "foreground": "#569CD6"
+            }
+        },
+        {
+            "name": "Ruchy Actor Keywords",
+            "scope": [
+                "keyword.actor.ruchy",
+                "keyword.spawn.ruchy",
+                "keyword.send.ruchy"
+            ],
+            "settings": {
+                "foreground": "#FF6B35",
+                "fontStyle": "bold"
+            }
+        },
+        {
+            "name": "Types",
+            "scope": [
+                "entity.name.type",
+                "storage.type"
+            ],
+            "settings": {
+                "foreground": "#4EC9B0"
+            }
+        },
+        {
+            "name": "Functions",
+            "scope": [
+                "entity.name.function",
+                "meta.function"
+            ],
+            "settings": {
+                "foreground": "#DCDCAA"
+            }
+        },
+        {
+            "name": "Strings",
+            "scope": [
+                "string"
+            ],
+            "settings": {
+                "foreground": "#CE9178"
+            }
+        },
+        {
+            "name": "Numbers",
+            "scope": [
+                "constant.numeric"
+            ],
+            "settings": {
+                "foreground": "#B5CEA8"
+            }
+        },
+        {
+            "name": "Pipeline Operator",
+            "scope": [
+                "keyword.operator.pipeline.ruchy"
+            ],
+            "settings": {
+                "foreground": "#FF6B35",
+                "fontStyle": "bold"
+            }
+        },
+        {
+            "name": "Actor Operators",
+            "scope": [
+                "keyword.operator.actor.send.ruchy",
+                "keyword.operator.actor.ask.ruchy"
+            ],
+            "settings": {
+                "foreground": "#FF6B35",
+                "fontStyle": "bold"
+            }
+        },
+        {
+            "name": "Operators",
+            "scope": [
+                "keyword.operator"
+            ],
+            "settings": {
+                "foreground": "#D4D4D4"
+            }
+        },
+        {
+            "name": "Variables",
+            "scope": [
+                "variable"
+            ],
+            "settings": {
+                "foreground": "#9CDCFE"
+            }
+        },
+        {
+            "name": "Punctuation",
+            "scope": [
+                "punctuation"
+            ],
+            "settings": {
+                "foreground": "#D4D4D4"
+            }
+        },
+        {
+            "name": "Attributes",
+            "scope": [
+                "meta.attribute",
+                "punctuation.definition.attribute"
+            ],
+            "settings": {
+                "foreground": "#4FC1FF"
+            }
+        },
+        {
+            "name": "Lifetimes",
+            "scope": [
+                "entity.name.lifetime"
+            ],
+            "settings": {
+                "foreground": "#FF8C94",
+                "fontStyle": "italic"
+            }
+        },
+        {
+            "name": "Macros",
+            "scope": [
+                "entity.name.macro"
+            ],
+            "settings": {
+                "foreground": "#4EC9B0",
+                "fontStyle": "bold"
+            }
+        }
+    ]
+}

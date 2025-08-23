@@ -1,6 +1,6 @@
 {
   "name": "ruchy-syntax-tools",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "description": "Comprehensive syntax highlighting and language support for the Ruchy programming language",
   "main": "index.js",
   "directories": {
@@ -18,13 +18,12 @@
     "clean": "make clean",
     "watch": "make watch",
     "validate": "npm run lint && npm test && npm run benchmark",
-    "prepublishOnly": "npm run validate && npm run build",
     "deploy": "./scripts/deploy.sh",
     "quality-check": "npm run lint && npm run test && node tools/benchmark.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ruchy-lang/ruchy-syntax-tools.git"
+    "url": "git+https://github.com/noahgift/ruchy-syntax-tools.git"
   },
   "keywords": [
     "ruchy",
@@ -41,18 +40,23 @@
   "license": "MIT",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/ruchy-lang/ruchy-syntax-tools/issues"
+    "url": "https://github.com/noahgift/ruchy-syntax-tools/issues"
   },
-  "homepage": "https://github.com/ruchy-lang/ruchy-syntax-tools#readme",
+  "homepage": "https://github.com/noahgift/ruchy-syntax-tools#readme",
   "files": [
     "grammars/",
+    "lsp/",
+    "vscode-extension/",
+    "upstream-contributions/",
     "test/fixtures/",
     "tools/",
     "docs/specifications/",
     "index.js",
     "README.md",
     "LICENSE",
-    "CLAUDE.md"
+    "CLAUDE.md",
+    "CONTRIBUTING.md",
+    "ECOSYSTEM_STATUS.md"
   ],
   "dependencies": {
     "js-yaml": "^4.1.0"
@@ -61,8 +65,8 @@
     "@types/node": "^20.0.0",
     "@vscode/vsce": "^2.19.0",
     "c8": "^8.0.0",
-    "eslint": "^9.0.0",
-    "prettier": "^3.0.0"
+    "eslint": "^9.34.0",
+    "prettier": "^3.6.2"
   },
   "engines": {
     "node": ">=16.0.0"
@@ -76,7 +80,13 @@
     "./textmate": "./grammars/textmate/ruchy.tmLanguage.json",
     "./tree-sitter": "./grammars/tree-sitter/grammar.js",
     "./highlight": "./grammars/highlight/ruchy.js",
-    "./prism": "./grammars/prism/prism-ruchy.js"
+    "./prism": "./grammars/prism/prism-ruchy.js",
+    "./monaco": "./grammars/monaco/ruchy.js",
+    "./codemirror": "./grammars/codemirror/ruchy.js",
+    "./rouge": "./grammars/rouge/ruchy.rb",
+    "./pygments": "./grammars/pygments/ruchy.py",
+    "./lsp": "./lsp/ruchy-lsp-server.js",
+    "./vscode": "./vscode-extension/ruchy-1.2.0.vsix"
   },
   "quality": {
     "coverage": {

@@ -1,7 +1,7 @@
 /**
  * Ruchy Syntax Tools
  * Main entry point for the NPM package
- * 
+ *
  * Provides access to all grammar implementations and utilities
  */
 
@@ -16,11 +16,11 @@ const path = require('path');
 function loadGrammar(grammarPath) {
   const fullPath = path.join(__dirname, grammarPath);
   const content = fs.readFileSync(fullPath, 'utf8');
-  
+
   if (grammarPath.endsWith('.json')) {
     return JSON.parse(content);
   }
-  
+
   return content;
 }
 
@@ -58,6 +58,54 @@ const RuchySyntaxTools = {
    */
   getPrismGrammar() {
     return loadGrammar('grammars/prism/prism-ruchy.js');
+  },
+
+  /**
+   * Get the Monaco Editor language definition
+   * @returns {string} Monaco Editor grammar content
+   */
+  getMonacoGrammar() {
+    return loadGrammar('grammars/monaco/ruchy.js');
+  },
+
+  /**
+   * Get the LSP server path
+   * @returns {string} Path to LSP server script
+   */
+  getLspServer() {
+    return path.join(__dirname, 'lsp', 'ruchy-lsp-server.js');
+  },
+
+  /**
+   * Get the CodeMirror 6 language definition
+   * @returns {string} CodeMirror 6 language module content
+   */
+  getCodeMirrorGrammar() {
+    return loadGrammar('grammars/codemirror/ruchy.js');
+  },
+
+  /**
+   * Get the Rouge lexer for GitHub/GitLab
+   * @returns {string} Rouge lexer Ruby file content
+   */
+  getRougeGrammar() {
+    return loadGrammar('grammars/rouge/ruchy.rb');
+  },
+
+  /**
+   * Get the Pygments lexer for Python tools
+   * @returns {string} Pygments lexer Python file content
+   */
+  getPygmentsGrammar() {
+    return loadGrammar('grammars/pygments/ruchy.py');
+  },
+
+  /**
+   * Get the VS Code extension path
+   * @returns {string} Path to VS Code extension VSIX file
+   */
+  getVsCodeExtension() {
+    return path.join(__dirname, 'vscode-extension', 'ruchy-1.2.0.vsix');
   },
 
   /**
@@ -102,7 +150,7 @@ const RuchySyntaxTools = {
   getTestFixtures() {
     const fixturesDir = path.join(__dirname, 'test', 'fixtures');
     const files = fs.readdirSync(fixturesDir);
-    
+
     return files
       .filter(f => f.endsWith('.rhy'))
       .map(file => ({
@@ -137,7 +185,7 @@ const RuchySyntaxTools = {
               results.errors.push(`Invalid TextMate grammar for ${fixture.name}`);
             }
             break;
-            
+
           case 'treesitter':
             const tsGrammar = this.getTreeSitterGrammar();
             if (tsGrammar && tsGrammar.includes('module.exports')) {
@@ -147,7 +195,7 @@ const RuchySyntaxTools = {
               results.errors.push(`Invalid Tree-sitter grammar for ${fixture.name}`);
             }
             break;
-            
+
           default:
             results.failed++;
             results.errors.push(`Unknown grammar type: ${grammarType}`);
@@ -183,7 +231,11 @@ const RuchySyntaxTools = {
       'ruchy.tmLanguage.json': this.getTextMateGrammar(),
       'grammar.js': this.getTreeSitterGrammar(),
       'ruchy.hljs.js': this.getHighlightJsGrammar(),
-      'prism-ruchy.js': this.getPrismGrammar()
+      'prism-ruchy.js': this.getPrismGrammar(),
+      'monaco-ruchy.js': this.getMonacoGrammar(),
+      'codemirror-ruchy.js': this.getCodeMirrorGrammar(),
+      'rouge-ruchy.rb': this.getRougeGrammar(),
+      'pygments-ruchy.py': this.getPygmentsGrammar()
     };
 
     if (!fs.existsSync(outputDir)) {
@@ -192,10 +244,10 @@ const RuchySyntaxTools = {
 
     for (const [filename, content] of Object.entries(grammars)) {
       const outputPath = path.join(outputDir, filename);
-      const data = typeof content === 'object' 
-        ? JSON.stringify(content, null, 2) 
+      const data = typeof content === 'object'
+        ? JSON.stringify(content, null, 2)
         : content;
-      
+
       fs.writeFileSync(outputPath, data, 'utf8');
       console.log(`Exported: ${outputPath}`);
     }
@@ -210,6 +262,12 @@ module.exports.getTextMateGrammar = RuchySyntaxTools.getTextMateGrammar;
 module.exports.getTreeSitterGrammar = RuchySyntaxTools.getTreeSitterGrammar;
 module.exports.getHighlightJsGrammar = RuchySyntaxTools.getHighlightJsGrammar;
 module.exports.getPrismGrammar = RuchySyntaxTools.getPrismGrammar;
+module.exports.getMonacoGrammar = RuchySyntaxTools.getMonacoGrammar;
+module.exports.getCodeMirrorGrammar = RuchySyntaxTools.getCodeMirrorGrammar;
+module.exports.getRougeGrammar = RuchySyntaxTools.getRougeGrammar;
+module.exports.getPygmentsGrammar = RuchySyntaxTools.getPygmentsGrammar;
+module.exports.getVsCodeExtension = RuchySyntaxTools.getVsCodeExtension;
+module.exports.getLspServer = RuchySyntaxTools.getLspServer;
 module.exports.getLanguageInfo = RuchySyntaxTools.getLanguageInfo;
 module.exports.getTestFixtures = RuchySyntaxTools.getTestFixtures;
 module.exports.validateGrammar = RuchySyntaxTools.validateGrammar;

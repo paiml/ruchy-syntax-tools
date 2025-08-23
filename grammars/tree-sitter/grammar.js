@@ -1,7 +1,7 @@
 /**
  * Tree-sitter grammar for Ruchy programming language
  * RSYN-0201: Tree-sitter grammar implementation
- * 
+ *
  * This grammar provides precise AST generation for semantic highlighting,
  * code navigation, and structural editing in Tree-sitter enabled editors.
  */
@@ -12,12 +12,12 @@ module.exports = grammar({
   extras: $ => [
     /\s/,
     $.line_comment,
-    $.block_comment,
+    $.block_comment
   ],
 
   externals: $ => [
     $._string_content,
-    $.raw_string_literal,
+    $.raw_string_literal
   ],
 
   precedences: $ => [
@@ -37,16 +37,16 @@ module.exports = grammar({
       'or',
       'range',
       'assign',
-      'closure',
+      'closure'
     ],
     ['member', 'range'],
-    ['call', 'range'],
+    ['call', 'range']
   ],
 
   conflicts: $ => [
     [$.type_identifier, $.identifier],
     [$.generic_type, $.type_identifier],
-    [$.closure_expression, $.block],
+    [$.closure_expression, $.block]
   ],
 
   rules: {
@@ -63,12 +63,12 @@ module.exports = grammar({
       $.const_declaration,
       $.static_declaration,
       $.actor_definition,
-      $.module_definition,
+      $.module_definition
     ),
 
     // Comments
     line_comment: $ => token(seq('//', /.*/)),
-    
+
     block_comment: $ => token(seq(
       '/*',
       /[^*]*\*+([^/*][^*]*\*+)*/,
@@ -82,9 +82,9 @@ module.exports = grammar({
 
     // Identifiers
     identifier: $ => /[a-z_][a-zA-Z0-9_]*/,
-    
+
     type_identifier: $ => /[A-Z][a-zA-Z0-9_]*/,
-    
+
     lifetime: $ => seq("'", $.identifier),
 
     // Keywords
@@ -98,7 +98,7 @@ module.exports = grammar({
       'actor', 'spawn', 'send',
       'self', 'Self', 'super', 'crate',
       'unsafe', 'extern',
-      'in', 'ref', 'box',
+      'in', 'ref', 'box'
     ),
 
     // Function definitions
@@ -116,7 +116,7 @@ module.exports = grammar({
 
     visibility_modifier: $ => choice(
       'pub',
-      seq('pub', '(', choice('crate', 'super', 'self'), ')'),
+      seq('pub', '(', choice('crate', 'super', 'self'), ')')
     ),
 
     generic_parameters: $ => seq(
@@ -129,14 +129,14 @@ module.exports = grammar({
     generic_parameter: $ => choice(
       $.lifetime,
       seq($.type_identifier, optional(seq(':', sepBy1('+', $.trait_bound)))),
-      seq('const', $.identifier, ':', $._type),
+      seq('const', $.identifier, ':', $._type)
     ),
 
     trait_bound: $ => choice(
       $.type_identifier,
       $.lifetime,
       seq('?', $.type_identifier),
-      seq('for', $.generic_parameters, $.type_identifier),
+      seq('for', $.generic_parameters, $.type_identifier)
     ),
 
     parameter_list: $ => seq(
@@ -149,7 +149,7 @@ module.exports = grammar({
     parameter: $ => choice(
       $.self_parameter,
       $.typed_parameter,
-      $.pattern_parameter,
+      $.pattern_parameter
     ),
 
     self_parameter: $ => seq(
@@ -174,7 +174,7 @@ module.exports = grammar({
 
     where_clause: $ => seq(
       'where',
-      sepBy1(',', $.where_predicate),
+      sepBy1(',', $.where_predicate)
     ),
 
     where_predicate: $ => seq(
@@ -194,7 +194,7 @@ module.exports = grammar({
       $.function_type,
       $.pointer_type,
       $.impl_trait_type,
-      $.dyn_trait_type,
+      $.dyn_trait_type
     ),
 
     primitive_type: $ => choice(
@@ -202,7 +202,7 @@ module.exports = grammar({
       'char', 'str',
       'i8', 'i16', 'i32', 'i64', 'i128', 'isize',
       'u8', 'u16', 'u32', 'u64', 'u128', 'usize',
-      'f32', 'f64',
+      'f32', 'f64'
     ),
 
     generic_type: $ => prec.dynamic(-1, seq(
@@ -263,7 +263,7 @@ module.exports = grammar({
       choice(
         seq(optional($.where_clause), ';'),
         seq($.field_list, optional($.where_clause)),
-        seq($.tuple_field_list, optional($.where_clause), ';'),
+        seq($.tuple_field_list, optional($.where_clause), ';')
       )
     ),
 
@@ -306,7 +306,7 @@ module.exports = grammar({
       optional(choice(
         $.tuple_field_list,
         $.field_list,
-        seq('=', $.const_expression),
+        seq('=', $.const_expression)
       ))
     ),
 
@@ -327,7 +327,7 @@ module.exports = grammar({
     _trait_item: $ => choice(
       $.trait_function,
       $.trait_type,
-      $.trait_const,
+      $.trait_const
     ),
 
     trait_function: $ => seq(
@@ -377,7 +377,7 @@ module.exports = grammar({
     _impl_item: $ => choice(
       $.function_definition,
       $.type_alias,
-      $.const_declaration,
+      $.const_declaration
     ),
 
     // Type alias
@@ -403,7 +403,7 @@ module.exports = grammar({
       seq(optional('::'), $.path_segment, repeat(seq('::', $.path_segment))),
       seq('{', sepBy(',', $.use_path), optional(','), '}'),
       seq($.use_path, 'as', $.identifier),
-      '*',
+      '*'
     ),
 
     path_segment: $ => choice(
@@ -411,7 +411,7 @@ module.exports = grammar({
       $.type_identifier,
       'self',
       'super',
-      'crate',
+      'crate'
     ),
 
     // Constants and statics
@@ -451,7 +451,7 @@ module.exports = grammar({
 
     _actor_item: $ => choice(
       $.actor_state,
-      $.actor_handler,
+      $.actor_handler
     ),
 
     actor_state: $ => seq(
@@ -515,7 +515,7 @@ module.exports = grammar({
       $.pipeline_expression,
       $.actor_send_expression,
       $.actor_ask_expression,
-      $.spawn_expression,
+      $.spawn_expression
     ),
 
     // Literals
@@ -525,7 +525,7 @@ module.exports = grammar({
       $.float_literal,
       $.char_literal,
       $.string_literal,
-      $.raw_string_literal,
+      $.raw_string_literal
     ),
 
     boolean_literal: $ => choice('true', 'false'),
@@ -535,10 +535,10 @@ module.exports = grammar({
         /[0-9][0-9_]*/,
         /0x[0-9a-fA-F_]+/,
         /0o[0-7_]+/,
-        /0b[01_]+/,
+        /0b[01_]+/
       ),
       optional(choice('i8', 'i16', 'i32', 'i64', 'i128', 'isize',
-                     'u8', 'u16', 'u32', 'u64', 'u128', 'usize'))
+        'u8', 'u16', 'u32', 'u64', 'u128', 'usize'))
     )),
 
     float_literal: $ => token(seq(
@@ -553,7 +553,7 @@ module.exports = grammar({
         /[^'\\]/,
         /\\[\\'"nrt0]/,
         /\\x[0-9a-fA-F]{2}/,
-        /\\u\{[0-9a-fA-F]{1,6}\}/,
+        /\\u\{[0-9a-fA-F]{1,6}\}/
       ),
       "'"
     ),
@@ -565,7 +565,7 @@ module.exports = grammar({
         /\\[\\'"nrt0]/,
         /\\x[0-9a-fA-F]{2}/,
         /\\u\{[0-9a-fA-F]{1,6}\}/,
-        seq('${', $._expression, '}'),
+        seq('${', $._expression, '}')
       )),
       '"'
     ),
@@ -582,7 +582,7 @@ module.exports = grammar({
       choice(
         $.let_statement,
         $.expression_statement,
-        $._expression,
+        $._expression
       ),
       optional(';')
     ),
@@ -592,7 +592,7 @@ module.exports = grammar({
       optional('mut'),
       $._pattern,
       optional(seq(':', $._type)),
-      optional(seq('=', $._expression)),
+      optional(seq('=', $._expression))
     ),
 
     expression_statement: $ => seq($._expression, ';'),
@@ -669,14 +669,14 @@ module.exports = grammar({
       optional('move'),
       choice(
         seq('||', optional(seq('->', $._type))),
-        seq('|', sepBy(',', $.closure_parameter), '|', optional(seq('->', $._type))),
+        seq('|', sepBy(',', $.closure_parameter), '|', optional(seq('->', $._type)))
       ),
       choice($._expression, $.block)
     )),
 
     closure_parameter: $ => choice(
       $.identifier,
-      seq($._pattern, optional(seq(':', $._type))),
+      seq($._pattern, optional(seq(':', $._type)))
     ),
 
     // Function calls and method calls
@@ -731,7 +731,7 @@ module.exports = grammar({
         ['comparative', choice('==', '!=', '<', '<=', '>', '>=')],
         ['shift', choice('<<', '>>')],
         ['additive', choice('+', '-')],
-        ['multiplicative', choice('*', '/', '%')],
+        ['multiplicative', choice('*', '/', '%')]
       ];
 
       return choice(...table.map(([precedence, operator]) =>
@@ -748,7 +748,7 @@ module.exports = grammar({
       seq('-', $._expression),
       seq('!', $._expression),
       seq('*', $._expression),
-      seq('&', optional('mut'), $._expression),
+      seq('&', optional('mut'), $._expression)
     )),
 
     cast_expression: $ => prec('cast', seq(
@@ -779,7 +779,7 @@ module.exports = grammar({
 
     field_initializer: $ => choice(
       seq($.identifier, ':', $._expression),
-      $.identifier,
+      $.identifier
     ),
 
     tuple_expression: $ => seq(
@@ -796,7 +796,7 @@ module.exports = grammar({
       '[',
       choice(
         seq(optional(sepBy(',', $._expression)), optional(',')),
-        seq($._expression, ';', $._expression),
+        seq($._expression, ';', $._expression)
       ),
       ']'
     ),
@@ -806,7 +806,7 @@ module.exports = grammar({
       seq($._expression, '..=', $._expression),
       seq($._expression, '..'),
       seq('..', $._expression),
-      '..',
+      '..'
     )),
 
     // Pipeline expression (Ruchy-specific)
@@ -833,7 +833,7 @@ module.exports = grammar({
       'spawn',
       choice(
         seq($.type_identifier, $.argument_list),
-        $.closure_expression,
+        $.closure_expression
       )
     ),
 
@@ -848,13 +848,13 @@ module.exports = grammar({
       $.slice_pattern,
       $.reference_pattern,
       $.or_pattern,
-      $.range_pattern,
+      $.range_pattern
     ),
 
     identifier_pattern: $ => choice(
       $.identifier,
       seq('ref', optional('mut'), $.identifier),
-      seq('mut', $.identifier),
+      seq('mut', $.identifier)
     ),
 
     wildcard_pattern: $ => '_',
@@ -880,14 +880,14 @@ module.exports = grammar({
       seq($.identifier, ':', $._pattern),
       $.identifier,
       seq('ref', optional('mut'), $.identifier),
-      seq('mut', $.identifier),
+      seq('mut', $.identifier)
     ),
 
     enum_pattern: $ => seq(
       choice($.type_identifier, $.scoped_identifier),
       optional(choice(
         $.tuple_pattern,
-        $.struct_pattern,
+        $.struct_pattern
       ))
     ),
 
@@ -912,7 +912,7 @@ module.exports = grammar({
 
     range_pattern: $ => choice(
       seq($._pattern, '..=', $._pattern),
-      seq($._pattern, '..', $._pattern),
+      seq($._pattern, '..', $._pattern)
     ),
 
     // Helper for scoped identifiers
@@ -930,9 +930,9 @@ module.exports = grammar({
       $.identifier,
       $.scoped_identifier,
       seq('-', $.const_expression),
-      seq('!', $.const_expression),
+      seq('!', $.const_expression)
       // Additional const expressions can be added here
-    ),
+    )
   }
 });
 

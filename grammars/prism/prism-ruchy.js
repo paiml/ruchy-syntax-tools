@@ -1,18 +1,18 @@
 /**
  * Prism.js Language Definition for Ruchy
  * RSYN-0302: Prism grammar for documentation sites
- * 
+ *
  * @fileoverview Ruchy language support for Prism.js
  * @version 1.0.0
  * @license MIT
- * 
+ *
  * Quality Requirements:
  * - Test Coverage: ≥80%
  * - Cyclomatic Complexity: ≤20
  * - Performance: <25ms for 50K lines
  */
 
-(function (Prism) {
+(function(Prism) {
   'use strict';
 
   // Guard against missing Prism
@@ -309,7 +309,7 @@
     Prism.hooks.add('wrap', function(env) {
       if (env.language === 'ruchy') {
         // Mark Ruchy-specific constructs for special styling
-        if (env.type === 'pipeline-operator' || 
+        if (env.type === 'pipeline-operator' ||
             env.type === 'actor-operator' ||
             env.type === 'actor-definition') {
           env.classes.push('ruchy-specific');
